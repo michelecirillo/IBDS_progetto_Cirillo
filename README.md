@@ -10,4 +10,3 @@ un altro aeroporto (che potrebbe essere parte del sistema o no).
 *tempo di viaggio*
 - Gli arrivi e le partenze ad ogni aeroporto sono schedulate secondo un calendario 
 giornaliero predefinito. 
-ciaoooo
