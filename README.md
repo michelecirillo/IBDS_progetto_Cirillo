@@ -9,4 +9,4 @@ un altro aeroporto (che potrebbe essere parte del sistema o no).
 - Gli aerei sono caratterizzati da proprietà come *aeroporto*, *aeroporto di destinazione*, 
 *tempo di viaggio*
 - Gli arrivi e le partenze ad ogni aeroporto sono schedulate secondo un calendario 
-giornaliero predefinito. frfr
+giornaliero predefinito.
