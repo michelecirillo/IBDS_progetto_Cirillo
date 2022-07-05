@@ -1,7 +1,6 @@
 ---
 title: Air traffic management system
 author: Michele Cirillo
-summary: prova priova prova
 ---
 
 Un progetto di **Michele Cirillo** per il corso di Internet Based Distributed Simulation (IBDS) dell'università "Tor Vergata" in Roma.
@@ -32,6 +31,9 @@ Consideriamo le seguenti assunzioni e/o limitazioni:
   - L'aeroporto di Milano Linate (LIN) 
 - Ogni aeroporto ha una torre di controllo che dà l'autorizzazione ad ogni aereo di 
 atterrare o decollare
+	- In caso le piste siano occupate, l'aereo che sta attendendo fa una nuova richiesta di decollo o atterraggio 
+	dopo un tempo predefinito.
+- L'uso della pista per il decollo richiede un tempo predefinito maggiore di 0.
 
 # Analisi dei requisiti
 Consideriamo la seguente tabella:
@@ -41,12 +43,12 @@ Consideriamo la seguente tabella:
 |R1|Ogni aeroporto ha 2 piste|Ariport Class, runway array attribute|
 |R2|Un aereo che arriva attende e dopo decolla di nuovo|Una richiesta di atterraggio genera una nuova richiesta di decollo|
 |R3|Gli aerei sono caratterizzati da aeroporto, aeroporto di destinazione e tempo di viaggio|Airplane Class; airport, destination airport and travel time attributes|
-|R4|Calendario giornaliero per gli arrivi e le partenze|Calendar singleton, operationalDay Class|
+|R4|Calendario giornaliero per gli arrivi e le partenze|operationalDay Class|
 
 # Preliminary Design 
 Consideriamo il seguente UML Class Diagram:
 
-![Federation Conceptual Model](./doc/federation_conceptual_model.jpg)
+![Federation Conceptual Model](./doc/federation_conceptual_model.jpg){width=90%}
 
 - *ATMSSImulation* contiene il main della simulazione, instanzia lo scenario ed il federato 
 associato (FCO o LIN)
@@ -54,6 +56,7 @@ associato (FCO o LIN)
 	- *code* indica il codice dell'aeroporto (FCO o LIN nel nostro esempio)
 	- *runway* contiene due booleani che indicano se le rispettive piste sono occupate 
 	o no
+	- Il calendario giornaliero è rappresentato da una collezione di _operationalDay_
 - *operationalDay* contiene tutti i voli schedulati in una giornata di lavoro dell'aeroporto corrispondente
 - *Airplane* è una classe che identifica gli aerei, caratterizzati dall'*airport*, 
 *destinationAirport* e *travelTime*
@@ -71,15 +74,17 @@ associato (FCO o LIN)
 della simulazione
 - _EventType_ è un'enum che contiene tutti i possibili tipi di eventi (sia remote che 
 local)
+  
+\newpage
 
-# Examples Scenario
+# Examples of scenarios
 ## Esempio 1
 
 Consideriamo la seguente illustrazione di un possibile scenario:
 
 ![scenario example 1](./doc/scenario_example1.jpg)
 
-Assumiamo di star simulando le ore 6:00AM del 24 Ottobre e ci concentriamo sui singoli aerei. 
+Assumiamo di osservare la simulazione alle ore 6:00AM del 24 Ottobre e ci concentriamo sui singoli aerei. 
 Assumiamo inoltre che il **travelTime** di ciascun aereo sia di 30 minuti.
 
 - *AZ001* e *AZ002* stanno entrambi partendo dall'aeroporto FCO e stanno quindi occupando le due piste 
@@ -88,4 +93,25 @@ disponibili
 - *AZ004* è nello stato **LANDED** in attesa di partire da LIN alle ore 3:00PM
 - *AZ005* è partito alle ore 5\:30 da LIN ed è arrivato a FCO, sta aspettando che una delle due piste di FCO si 
 liberi per poter atterrare. 
+
+\newpage
+
+## Esempio 2
+
+Consideriamo la seguente illustriazione di un possibile scenario:
+
+![scenario example 1](./doc/scenario_example2.jpg)
+
+Assumiamo di osservare la simulazione alle ore 17:00 del 25 Ottobre e ci concentriamo sui singolo aerei.
+Assumiamo inoltre che il **travelTime** di ciascun aereo sia di 30 minuti e che gli 
+aerei abbiano un tempo prestabilito di decollo (e quindi di utilizzo della pista) di 
+almeno 5 minuti.
+
+- _AZ001_ e _AZ002_ stanno entrambi decollando dall'aeroporto LIN e quindi utilizzano entrambe le piste disponibili
+- _AZ003_ è appena arrivato all'aeroporto di FCO e sta per atterrare, siccome FCO ha almeno una pista non 
+  occupata
+- _AZ004_ è fermo (**LANDED**) all'aeroporto FCO
+- _AZ005_ e _AZ006_ dovrebbero entrambi decollare alle 17:05 ma stanno aspettando che le 
+piste di LIN si liberino
+- _AZ007_ è in viaggio (**IN FLIGHT**) da FCO a LIN e si trova a metà via.
     
