@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>490</y>
+      <w>160</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>ATMSSimulation
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>300</y>
+      <w>170</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Airport
+--
+code: String
+runway: Boolean[2]</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>130</x>
+      <y>380</y>
+      <w>40</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=*
+m2=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>220</x>
+      <y>200</y>
+      <w>240</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=2</panel_attributes>
+    <additional_attributes>10.0;120.0;150.0;120.0;150.0;10.0;220.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>220</x>
+      <y>130</y>
+      <w>240</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+flights
+m2=*</panel_attributes>
+    <additional_attributes>10.0;20.0;220.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>470</x>
+      <y>270</y>
+      <w>140</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>/Event/
+--
+time: Long
+type: EventType</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>320</x>
+      <y>430</y>
+      <w>150</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>RemoteEvent
+--
+airplane: Airplane</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>580</x>
+      <y>500</y>
+      <w>160</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>LocalEvent
+--
+airplane: Airplane</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>350</y>
+      <w>170</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0;150.0;50.0;150.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>380</x>
+      <y>350</y>
+      <w>170</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>150.0;10.0;150.0;50.0;10.0;50.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>220</x>
+      <y>370</y>
+      <w>380</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+r1=eventsList
+m1=*</panel_attributes>
+    <additional_attributes>360.0;170.0;40.0;170.0;40.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>110</y>
+      <w>210</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Airplane
+--
+airport: Airport
+destinationAirport: Airport
+travelTime: Int
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>130</x>
+      <y>180</y>
+      <w>90</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+calendar
+m2=*</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>190</y>
+      <w>160</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+AirplaneStatus
+--
+IN_FLIGHT
+LANDED</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>300</y>
+      <w>160</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+EventType
+--
+LANDING_REQUEST
+TAKE_OFF_REQUEST</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>110</y>
+      <w>170</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>operationalDay
+--
+date: Date</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>220</x>
+      <y>340</y>
+      <w>160</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;generates&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;140.0;20.0;140.0;90.0</additional_attributes>
+  </element>
+</diagram>
