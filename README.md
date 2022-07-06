@@ -186,5 +186,5 @@ accordo con l'**OMT** (Object Model Template), producendo un **FOM** (Federation
 |Name|Representation|Enum Name|Enum Value|
 |---|----|----|---|
 |<td rowspan=2>EventType</td>|HLAunicodeString|LANDING_REQUEST|1
-||||
+|||TAKE_OFF_REQUEST|2|
     
