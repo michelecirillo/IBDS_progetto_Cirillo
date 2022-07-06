@@ -194,8 +194,11 @@ accordo con l'**OMT** (Object Model Template), producendo un **FOM** (Federation
 |DateArray|HLAbyte|2|HLAfixedArray|
 
 ## Data Types Table - Fixed Record Data Type
-|<td rowspan=2>Record name</td>|<td colspan=3>Field</td>|||<td rowspan=2>Encoding</td>|<td rowspan=2>Semantics</td>|
-||Name|Type|Semantics|||
+|Record name|Name|Type|Semantics|Encoding|Semantics|
 |----|----|----|----|----|----|
-|FlightScheduledRecord|||||
+|AirplaneRecord|airport|HLAunicodeString|Codice dell'aeroporto di partenza|HLAfixedRecord|Rappresentazione HLA di un aereo|
+||destinationAirport|HLAunicodeString|Codice dell'aeroporto di destinazione|||
+||travelTime|HLAinteger16BE|Tempo di volo|||
+|FlightScheduledRecord|time|HLAinteger64Time|Minuto in cui è schedulato il volo|HLAfixedRecord|Tempo e aereo schedulato in un operational day|
+||airplane|Airplane|Aereo schedulato|||
     
