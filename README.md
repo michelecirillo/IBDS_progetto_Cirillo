@@ -185,6 +185,17 @@ accordo con l'**OMT** (Object Model Template), producendo un **FOM** (Federation
 ## Data Types Table - Enumerated Data Type
 |Name|Representation|Enum Name|Enum Value|
 |---|----|----|---|
-|<td rowspan=2>EventType</td>|HLAunicodeString|LANDING_REQUEST|1
+|EventType|HLAunicodeString|LANDING_REQUEST|1
 |||TAKE_OFF_REQUEST|2|
+
+## Data Types Table - Array Data Type
+|Name|DataType|Cardinality|Encoding|
+|----|----|---|----|
+|DateArray|HLAbyte|2|HLAfixedArray|
+
+## Data Types Table - Fixed Record Data Type
+|<td rowspan=2>Record name</td>|<td colspan=3>Field</td>|||<td rowspan=2>Encoding</td>|<td rowspan=2>Semantics</td>|
+||Name|Type|Semantics|||
+|----|----|----|----|----|----|
+|FlightScheduledRecord|||||
     
