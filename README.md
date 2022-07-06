@@ -1,6 +1,7 @@
 ---
 title: Air traffic management system
 author: Michele Cirillo
+geometry: margin=3.5cm
 ---
 
 Un progetto di **Michele Cirillo** per il corso di Internet Based Distributed Simulation (IBDS) dell'università "Tor Vergata" in Roma.
@@ -34,6 +35,8 @@ atterrare o decollare
 	- In caso le piste siano occupate, l'aereo che sta attendendo fa una nuova richiesta di decollo o atterraggio 
 	dopo un tempo predefinito.
 - L'uso della pista per il decollo richiede un tempo predefinito maggiore di 0.
+- Un aeroporto può schedulare soltanto una partenza (**departure**) verso un qualunque 
+altro aeroporto (del sistema o no).
 
 # Analisi dei requisiti
 Consideriamo la seguente tabella:
@@ -114,4 +117,74 @@ almeno 5 minuti.
 - _AZ005_ e _AZ006_ dovrebbero entrambi decollare alle 17:05 ma stanno aspettando che le 
 piste di LIN si liberino
 - _AZ007_ è in viaggio (**IN FLIGHT**) da FCO a LIN e si trova a metà via.
+
+# HLA Object and Instances
+
+Una volta prodotto il federation conceptual model che fornisce una descrizione astratta _platform 
+independent_ delle entità che compongono la simulazione e delle loro relazioni statiche e dinamiche, ci 
+concentriamo sui concetti relativi al modello HLA\: identificando i *federati*, gli _oggetti HLA_ 
+e le *interazioni* tra i federati che compongono la *federazione*. 
+
+|Object Model Element|HLA Mapping|
+|--------------------|-----------|
+|Airport|Federate|
+|operationalDay|ObjectClass|
+|Airplane|Not mapped (local entity)|
+|Airplane that flyies from one airport to the other|InteractionClass|
+
+# Detailed Design
+
+Passiamo quindi al raffinamento del model _platform independent_ in un modello _platform dependent_\: 
+in questo caso il modello a oggetti **HLA**.
+
+![Federation design](./doc/federation_design.jpg)
+
+Facciamo riferimento alle differenze del __federation design__ rispetto al __federation conceptual model__
+
+- A _operationalDay_ è stato aggiunto lo stereotipo \<\<ObjectClass>> per denotare che 
+si tratta di un oggetto, nella concezione di oggetto HLA
+- Sono state aggiunte le classi _rtiAmbassador_ e _FederateAmbassadorImpl_ che sono le classi che implementano la 
+logica di comunicazione tra federati in una federazione HLA
+- A _RemoteEvent_ è stato aggiunto lo stereotipo \<\<InteractionClass>> per denotare che si tratta di una 
+interazione tra federati, nella concezione di interazione HLA.
+
+Le restanti classi rimaste invariate verranno implementate nella concezione del classico 
+modello a oggetti.
+
+# Federation Object Model
+
+Ora che sono state individuate le *entità*, gli *oggetti* e le _interazioni_ HLA, bisogna documentare l'interazione federazione in 
+accordo con l'**OMT** (Object Model Template), producendo un **FOM** (Federation Object Model).
+
+## Object Class Table
+|Name|Superclass|Sharing|
+|----|-----|----|
+|operationalDay|HLAobjectRoot|P/S|
+
+## Attributes Table
+|Object|Name|Type|Update|Ownership|Sharing|Order|
+|----|----|----|----|---|---|----|
+|operationalDay|date|DateArray|Static|N|N|Timestamp|
+|operationalDay|flightsScheduled|FlightScheduledRecord|Static|N|P/S|Timestamp|
+
+## Interaction Class
+|InteractionClass|Superclass|Sharing|Order|
+|----|----|---|----|
+|RemoteEvent|HLAinteractionRoot|P/S|Timestamp|
+
+## Interaction Parameters Table
+|Interaction|Name|Type|Order|
+|----|----|----|----|
+|RemoteEvent|airplane|AirplaneRecord|Timestamp|
+
+## Synchronization Table
+|Label|Capability|
+|---|----|
+|ReadyToRun|Register/Achieve|
+
+## Data Types Table - Enumerated Data Type
+|Name|Representation|Enum Name|Enum Value|
+|---|----|----|---|
+|<td rowspan=2>EventType</td>|HLAunicodeString|LANDING_REQUEST|1
+||||
     
