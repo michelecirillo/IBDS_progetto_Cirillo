@@ -5,7 +5,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>153</x>
-      <y>522</y>
+      <y>504</y>
       <w>144</w>
       <h>54</h>
     </coordinates>
@@ -17,7 +17,7 @@
     <id>UMLClass</id>
     <coordinates>
       <x>153</x>
-      <y>351</y>
+      <y>333</y>
       <w>153</w>
       <h>81</h>
     </coordinates>
@@ -31,7 +31,7 @@ runway: Boolean[2]</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>216</x>
-      <y>423</y>
+      <y>405</y>
       <w>36</w>
       <h>117</h>
     </coordinates>
@@ -44,7 +44,7 @@ m2=1</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>288</x>
-      <y>108</y>
+      <y>90</y>
       <w>135</w>
       <h>270</h>
     </coordinates>
@@ -57,7 +57,7 @@ r2=managedAirplanes</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>216</x>
-      <y>108</y>
+      <y>90</y>
       <w>63</w>
       <h>108</h>
     </coordinates>
@@ -70,7 +70,7 @@ m2=*</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>522</x>
-      <y>324</y>
+      <y>306</y>
       <w>126</w>
       <h>81</h>
     </coordinates>
@@ -84,7 +84,7 @@ type: EventType</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>387</x>
-      <y>468</y>
+      <y>450</y>
       <w>135</w>
       <h>63</h>
     </coordinates>
@@ -98,7 +98,7 @@ airplane: Airplane</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>621</x>
-      <y>531</y>
+      <y>513</y>
       <w>144</w>
       <h>63</h>
     </coordinates>
@@ -111,7 +111,7 @@ airplane: Airplane</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>567</x>
-      <y>396</y>
+      <y>378</y>
       <w>153</w>
       <h>153</h>
     </coordinates>
@@ -122,7 +122,7 @@ airplane: Airplane</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>441</x>
-      <y>396</y>
+      <y>378</y>
       <w>153</w>
       <h>90</h>
     </coordinates>
@@ -133,7 +133,7 @@ airplane: Airplane</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>297</x>
-      <y>414</y>
+      <y>396</y>
       <w>342</w>
       <h>180</h>
     </coordinates>
@@ -146,7 +146,7 @@ m1=*</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>135</x>
-      <y>18</y>
+      <y>0</y>
       <w>189</w>
       <h>99</h>
     </coordinates>
@@ -162,20 +162,19 @@ travelTime: Int
     <id>Relation</id>
     <coordinates>
       <x>216</x>
-      <y>261</y>
-      <w>81</w>
+      <y>243</y>
+      <w>36</w>
       <h>108</h>
     </coordinates>
-    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
-calendar
-m2=*</panel_attributes>
+    <panel_attributes>lt=-&gt;
+m2=1</panel_attributes>
     <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
       <x>729</x>
-      <y>252</y>
+      <y>234</y>
       <w>144</w>
       <h>81</h>
     </coordinates>
@@ -190,7 +189,7 @@ LANDED</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>729</x>
-      <y>351</y>
+      <y>333</y>
       <w>144</w>
       <h>81</h>
     </coordinates>
@@ -205,7 +204,7 @@ TAKE_OFF_REQUEST</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>153</x>
-      <y>198</y>
+      <y>180</y>
       <w>153</w>
       <h>72</h>
     </coordinates>
@@ -219,7 +218,7 @@ date: Date</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>297</x>
-      <y>387</y>
+      <y>369</y>
       <w>144</w>
       <h>99</h>
     </coordinates>
@@ -231,7 +230,7 @@ date: Date</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>351</x>
-      <y>216</y>
+      <y>198</y>
       <w>117</w>
       <h>54</h>
     </coordinates>
@@ -244,7 +243,7 @@ date: Date</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>504</x>
-      <y>72</y>
+      <y>54</y>
       <w>162</w>
       <h>81</h>
     </coordinates>
@@ -257,7 +256,7 @@ date: Date</panel_attributes>
     <id>UMLClass</id>
     <coordinates>
       <x>504</x>
-      <y>189</y>
+      <y>171</y>
       <w>171</w>
       <h>63</h>
     </coordinates>
@@ -269,7 +268,7 @@ date: Date</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>576</x>
-      <y>144</y>
+      <y>126</y>
       <w>27</w>
       <h>63</h>
     </coordinates>
@@ -280,7 +279,7 @@ date: Date</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>297</x>
-      <y>261</y>
+      <y>243</y>
       <w>189</w>
       <h>135</h>
     </coordinates>
@@ -294,7 +293,7 @@ r1=rtiAmbassador</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>297</x>
-      <y>243</y>
+      <y>225</y>
       <w>405</w>
       <h>171</h>
     </coordinates>

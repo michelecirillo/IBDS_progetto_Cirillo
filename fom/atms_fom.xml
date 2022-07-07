@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='utf-8'?>
+<objectModel xmlns='http://standards.ieee.org/IEEE1516-2010' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://standards.ieee.org/IEEE1516-2010 http://standards.ieee.org/downloads/1516/1516.2-2010/IEEE1516-DIF-2010.xsd'>
+	<modelIdentification>
+		<name>ATMSSimulation</name>
+		<type>FOM</type>
+		<version>1.0</version>
+	</modelIdentification>
+	<objects>
+		<objectClass>
+			<name>HLAobjectRoot</name>
+			<objectClass>
+				<name>OperationalDay</name>
+				<sharing>PublishSubscribe</sharing>
+				<semantics>Flights scheduled in an operational day with corresponding departure/arrival time</semantics>
+				<attribute>
+					<name>flightsScheduled</name>
+					<dataType>FlightsScheduledList</dataType>
+					<updateType>Static</updateType>
+					<updateCondition>On Change</updateCondition>
+					<ownership>N</ownership>
+					<sharing>PublishSubscribe</sharing>
+					<transportation>HLAbestEffort</transportation>
+					<order>TimeStamp</order>
+					<semantics>List of airplane and corresponding arrival/departure time</semantics>
+				</attribute>
+			</objectClass>
+		</objectClass>
+	</objects>
+	<interactions>
+		<interactionClass>
+			<name>HLAinteractionRoot</name>
+			<interactionClass>
+				<name>RemoteEvent</name>
+				<sharing>PublishSubscribe</sharing>
+				<transportation>HLAbestEffort</transportation>
+				<order>TimeStamp</order>
+				<semantics>Remote Event which is sent to notify the destination (remote) airport 
+				that an airplane is approaching and must be taken under control by the Tower. 
+				Wraps a local event which has to be generated when the interaction is received</semantics>
+				<parameter>
+					<name>type</name>
+					<dataType>EventType</dataType>
+					<order>TimeStamp</order>
+					<semantics>Event to be scheduled when the approaching airplane is taken
+					under control by the destination airport Tower</semantics>
+				</parameter>
+				<parameter>
+					<name>airplane</name>
+					<dataType>AirplaneRecord</dataType>
+					<order>TimeStamp</order>
+					<semantics>Approaching airplane</semantics>
+				</parameter>
+			</interactionClass>
+		</interactionClass>
+	</interactions>
+	<dimensions />
+	<synchronizations>
+		<synchronizationPoint>
+			<label>ReadytoRun</label>
+			<capability>RegisterAchieve</capability>
+			<semantics>Waiting for each federate joining</semantics>
+		</synchronizationPoint>
+	</synchronizations>
+	<transportations />
+	<switches>
+		<autoProvide isEnabled="false" />
+		<conveyRegionDesignatorSets isEnabled="false" />
+		<conveyProducingFederate isEnabled="false" />
+		<attributeScopeAdvisory isEnabled="false" />
+		<attributeRelevanceAdvisory isEnabled="false" />
+		<objectClassRelevanceAdvisory isEnabled="false" />
+		<interactionRelevanceAdvisory isEnabled="false" />
+		<serviceReporting isEnabled="false" />
+		<exceptionReporting isEnabled="false" />
+		<delaySubscriptionEvaluation isEnabled="false" />
+		<automaticResignAction resignAction="CancelThenDeleteThenDivest" />
+	</switches>
+	<dataTypes>
+		<basicDataRepresentations />
+		<simpleDataTypes />
+		<enumeratedDataTypes>
+			<enumeratedData>
+				<name>EventType</name>
+				<representation>HLAunicodeString</representation>
+				<enumerator>
+					<name>LANDING_REQUEST</name>
+					<value>1</value>
+				</enumerator>
+				<enumerator>
+					<name>TAKE_OFF_REQUEST</name>
+					<value>2</value>
+				</enumerator>
+			</enumeratedData>
+		</enumeratedDataTypes>
+
+		<arrayDataTypes>
+			<arrayData>
+				<name>FlightScheduledList</name>
+				<dataType>FlightScheduledRecord</dataType>
+				<cardinality>Dynamic</cardinality>
+				<encoding>HLAvariableArray</encoding>
+			</arrayData>
+		</arrayDataTypes>
+		<fixedRecordDataTypes>
+			<fixedRecordData>
+				<name>AirplaneRecord</name>
+				<fields>
+					<field>
+						<name>flightCode</name>
+						<type>HLAunicodeString</type>
+						<semantics>Airplane flight code</semantics>
+					</field>
+					<field>
+						<name>airport</name>
+						<type>HLAunicodeString</type>
+						<semantics>Source airport code</semantics>
+					</field>
+					<field>
+						<name>destinationAirport</name>
+						<type>HLAunicodeString</type>
+						<semantics>Destination airport code</semantics>
+					</field>
+					<field>
+						<name>travelTime</name>
+						<type>HLAinteger64BE</type>
+						<semantics>Airplane travel time</semantics>
+					</field>
+				</fields>
+				<semantics>HLA representation of an airplane</semantics>
+			</fixedRecordData>
+			<fixedRecordData>
+				<name>FlightScheduleRecord</name>
+				<fields>
+					<field>
+						<name>time</name>
+						<type>HLAinteger64BE</type>
+						<semantics>Time when flight is scheduled</semantics>
+					</field>
+					<field>
+						<name>airplane</name>
+						<type>AirplaneRecord</type>
+						<semantics>Scheduled airplane</semantics>
+					</field>
+				</fields>
+			</fixedRecordData>
+		</fixedRecordDataTypes>
+		<variantRecordDataTypes />
+	</dataTypes>
+</objectModel>
