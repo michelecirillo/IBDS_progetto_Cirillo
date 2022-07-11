@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
@@ -96,7 +97,8 @@ public class Airport {
 	private Boolean[] isRunwayClear; // runway clearance state
 	private Set<Airplane> managedAirplanes; // collection of airplanes under the Control Tower
 											// responsibility
-	private SortedSet<LocalEvent> eventsList; // ordered list of events to be processed
+	private PriorityQueue<LocalEvent> eventsList; // ordered queue of events to be processed (PriorityQueue allows
+													// duplicates)
 	private OperationalDay operationalDay;
 
 	// simulation properties
@@ -125,7 +127,7 @@ public class Airport {
 	public Airport(String code, int runwaysLength, OperationalDay operationalDay, int seed, long endTime) {
 		this.code = code;
 		this.managedAirplanes = new HashSet<Airplane>();
-		eventsList = new TreeSet<LocalEvent>();
+		eventsList = new PriorityQueue<LocalEvent>();
 		federateName = code + "_Airport";
 		this._seed = seed;
 		this._simulationEndTime = endTime;
@@ -159,7 +161,7 @@ public class Airport {
 	}
 
 	private LocalEvent getNextEvent() {
-		return this.eventsList.first();
+		return this.eventsList.peek();
 	}
 
 	public void addManagedAirplane(Airplane a) {
@@ -247,7 +249,7 @@ public class Airport {
 
 				if (!eventsList.isEmpty()) {
 
-					nextEventTimestamp = eventsList.first().getTime();
+					nextEventTimestamp = eventsList.peek().getTime();
 					System.out.println("[" + fedAmbassador.federateTime + "] " + federateName + ": Next Message Time: "
 							+ nextEventTimestamp);
 
@@ -267,7 +269,7 @@ public class Airport {
 						Thread.sleep(10);
 					System.out.println("[" + fedAmbassador.federateTime + "] " + federateName + ": Time Advance Grant");
 
-					event = eventsList.first();
+					event = eventsList.peek();
 
 					// process event
 					process(event);
@@ -461,7 +463,7 @@ public class Airport {
 				// runway is set as busy
 				this.setRunwayClearance(runwayClear, false);
 				System.out.println("[" + fedAmbassador.federateTime + "] TOWER: Flight" + plane.getFlightCode()
-						+ " clear for landing ");
+						+ " clear for landing at runway " + runwayClear);
 				plane.setState(AirplaneState.LANDED);
 				nextEventTime = currentTime + timeStep;
 				// Once landed, schedule new clear runway event after timeStep time
@@ -491,8 +493,8 @@ public class Airport {
 			if ((runwayClear = runwayClear()) != -1) {
 				// Set busy this runway
 				this.setRunwayClearance(runwayClear, false);
-				System.out
-						.println("[" + fedAmbassador.federateTime + "] TOWER: Runway " + runwayClear + " now is busy. ");
+				System.out.println(
+						"[" + fedAmbassador.federateTime + "] TOWER: Runway " + runwayClear + " now is busy. ");
 				// TAKE_OFF_REQUEST generates a remote event
 				// that is implemented as an interaction sent to the remote airport
 
@@ -527,7 +529,7 @@ public class Airport {
 						+ " NOT clear for departure ");
 				nextEventTime = currentTime + timeStep;
 				System.out.println("[" + fedAmbassador.federateTime + "] TOWER: Flight" + plane.getFlightCode()
-						+ " fly around and ask again at time " + nextEventTime);
+						+ " wait and ask again at time " + nextEventTime);
 				addEvent(new AirplaneEvent(EventType.TAKE_OFF_REQUEST, nextEventTime, plane));
 			}
 			break;
