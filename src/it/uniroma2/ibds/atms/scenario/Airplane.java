@@ -8,14 +8,14 @@ public class Airplane {
 	String flightCode;
 	String airport;
 	String destinationAirport;
-	private int travelTime;
+	private long travelTime;
 
-	public Airplane(AirplaneState state, String flightCode, String airport, String destinationAirport, int travelTime) {
+	public Airplane(AirplaneState state, String flightCode, String airport, String destinationAirport, long l) {
 		this.state = state;
 		this.flightCode = flightCode;
 		this.airport = airport;
 		this.destinationAirport = destinationAirport;
-		this.travelTime = travelTime;
+		this.travelTime = l;
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class Airplane {
 		this.destinationAirport = destinationAirport;
 	}
 
-	public int getTravelTime() {
+	public long getTravelTime() {
 		return travelTime;
 	}
 

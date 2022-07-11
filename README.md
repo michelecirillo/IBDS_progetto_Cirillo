@@ -34,7 +34,8 @@ Consideriamo le seguenti assunzioni e/o limitazioni:
 atterrare o decollare
 	- In caso le piste siano occupate, l'aereo che sta attendendo fa una nuova richiesta di decollo o atterraggio 
 	dopo un tempo predefinito.
-- L'uso della pista per il decollo richiede un tempo predefinito maggiore di 0.
+- L'uso della pista per il decollo e l'atterraggio richiede un tempo predefinito maggiore di 0.
+	- Assumiamo questo tempo sia di 10 minuti.
 - Un aeroporto può schedulare soltanto una partenza (**departure**) verso un qualunque 
 altro aeroporto (del sistema o no).
 
@@ -73,6 +74,10 @@ associato (FCO o LIN)
 	- *airplane* è l'aereo coinvolto nell'evento, che in questo caso sarà un evento di 
 	*take off request* o *landing request*, in caso la pista fosse occupata al momento 
 	dell'arrivo dell'aereo
+- _AirplaneEvent_ è l'evento di atterraggio o decollo che riguarda un aereo, il suo 
+  _EventType_ può essere quindi _LANDING_REQUEST_ o _TAKE_OFF_REQUEST_ 
+ - _RunwayEvent_ è l'evento che cambia lo status (_clearance_) di una pista (_runway_), 
+   il suo _EventType_ è quindi _RUNWAY_CLEARANCE_REQUEST_ 
 - _AirplaneStatus_ è un'enum che contiene tutti i possibili stati in cui può trovarsi un'aereo 
 della simulazione
 - _EventType_ è un'enum che contiene tutti i possibili tipi di eventi (sia remote che 

@@ -10,21 +10,21 @@ import it.uniroma2.ibds.atms.scenario.Airplane;
 
 public class OperationalDay {
 	private Date date;
-	private SortedMap<Integer, Airplane> flightsScheduled;
+	private SortedMap<Long, Airplane> flightsScheduled;
 
 	public OperationalDay(Date date) {
 		if (date.after(new Date())) {
 			throw new IllegalArgumentException("Inserita data precedente ad oggi!");
 		}
 		this.date = date;
-		this.flightsScheduled = new TreeMap<Integer, Airplane>();
+		this.flightsScheduled = new TreeMap<Long, Airplane>();
 	}
 
 	public Date getDate() {
 		return date;
 	}
 
-	public void scheduleNewFlight(int time, Airplane a) {
+	public void scheduleNewFlight(long time, Airplane a) {
 		this.flightsScheduled.put(time, a);
 	}
 
@@ -58,6 +58,15 @@ public class OperationalDay {
 			return false;
 		OperationalDay other = (OperationalDay) obj;
 		return Objects.equals(date, other.date);
+	}
+	
+	/**
+	 * 
+	 * Update typed allowed on this HLA Object Class
+	 *
+	 */
+	static enum UpdateType{
+		INSERT
 	}
 
 }

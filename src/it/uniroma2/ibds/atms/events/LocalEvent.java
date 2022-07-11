@@ -1,28 +1,9 @@
 package it.uniroma2.ibds.atms.events;
 
-import it.uniroma2.ibds.atms.scenario.Airplane;
+public abstract class LocalEvent extends Event implements Comparable<LocalEvent>{
 
-public class LocalEvent extends Event implements Comparable<LocalEvent>{
-	
-	private Airplane airplane; //airplane generating/affected by the event
-	
-	public LocalEvent(EventType eventType, Long time, Airplane airplane) {
-		super(eventType, time);
-		this.airplane = airplane;
-	}
-
-	/**
-	 * @return the airplane
-	 */
-	public Airplane getAirplane() {
-		return airplane;
-	}
-
-	/**
-	 * @param airplane the airplane to set
-	 */
-	public void setAirplane(Airplane airplane) {
-		this.airplane = airplane;
+	public LocalEvent(EventType type, Long time) {
+		super(type, time);
 	}
 	
 	@Override
@@ -34,6 +15,5 @@ public class LocalEvent extends Event implements Comparable<LocalEvent>{
 		else return -1;
 		
 	}
-	
 
 }
