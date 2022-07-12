@@ -7,10 +7,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.PriorityQueue;
-import java.util.Random;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.SortedMap;
 
 import hla.rti1516e.AttributeHandle;
 import hla.rti1516e.AttributeHandleSet;
@@ -683,13 +681,11 @@ public class Airport {
 			System.out.println(le.getEventType() + " expected at time " + le.getTime());
 		}
 
-		System.out.println("Flight remained: ");
-		Iterator<Airplane> flightsRemained = this.operationalDay.getFlightsScheduled();
-		Airplane plane;
-		while (flightsRemained.hasNext()) {
-			plane = flightsRemained.next();
-			System.out.println(plane.getFlightCode());
-		}
+		System.out.println("Flights remained: ");
+		SortedMap<Long, Airplane> flightsRemained = this.operationalDay.getFlightsScheduled();
+		flightsRemained.tailMap(this._simulationEndTime+1).forEach((time, airplane) -> {
+			System.out.println("<" + time + "," + airplane.getFlightCode()+">");
+		});
 
 	}
 }

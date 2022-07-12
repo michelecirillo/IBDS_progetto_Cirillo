@@ -28,7 +28,7 @@ public class OperationalDay {
 		this.flightsScheduled.put(time, a);
 	}
 
-	public Iterator<Airplane> getFlightsScheduled() {
+	public Iterator<Airplane> getAirplanesScheduled() {
 		return this.flightsScheduled.values().iterator();
 	}
 
@@ -38,6 +38,10 @@ public class OperationalDay {
 
 	public int length() {
 		return this.flightsScheduled.size();
+	}
+	
+	public SortedMap<Long, Airplane> getFlightsScheduled() {
+		return this.flightsScheduled;
 	}
 
 	/**
