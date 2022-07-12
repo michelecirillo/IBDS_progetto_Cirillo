@@ -295,13 +295,14 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 			if (destEncoder.getValue().equals(this.federate.getCode())) {
 				System.out.println("[" + this.federateTime + "] " + this.federate.federateName
 						+ "_FEDAMB Received Attribute Insert.");
+				System.out.println("\t flightCode: " + flightCodeDecoder.getValue());
 				// The local object is updated
 				// Create new airplane with source and destination airport switched
 				Airplane a = new Airplane(AirplaneState.LANDED, flightCodeDecoder.getValue(), airportEncoder.getValue(),
 						destEncoder.getValue(), travelTimeEncoder.getValue());
 				// Decode reflect attribute event time
-				HLAinteger64Time theTimeDecoder = (HLAinteger64Time) theTime;
-				long arrivalTime = theTimeDecoder.getValue() - this.federateLookahead + travelTimeEncoder.getValue();
+				long arrivalTime = ((HLAinteger64Time) theTime).getValue();
+				System.out.println("\t arrivalTime: "+arrivalTime);
 				// Schedule new flight with event time - federate.lookahead + plane travel time
 				this.federate.addFlightToOperationalDay(arrivalTime, a);
 				// a local event corresponding to the remote one is added to the eventlist
