@@ -520,7 +520,6 @@ public class Airport {
 				this.managedAirplanes.remove(plane);
 				// an interaction is sent to the remote airport federate
 				sendRemoteEvent(re);
-				// TODO Uno dei due
 				// Schedule departure from this airport
 //				this.scheduleNewFlight(nextEventTime, plane);
 			} else {
