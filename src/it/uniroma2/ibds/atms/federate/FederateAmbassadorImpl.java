@@ -40,7 +40,7 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 
 	// these variables are accessible in the package
 	protected long federateTime = 0; // logical time
-	protected long federateLookahead = 5;
+	protected long federateLookahead = 10;
 
 	protected boolean isRegulating = false;
 	protected boolean isConstrained = false;
@@ -260,7 +260,8 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 		OperationalDay.UpdateType tag = OperationalDay.UpdateType.valueOf(new String(userSuppliedTag));
 		switch (tag) {
 		case INSERT:
-			//System.out.println("[" + this.federateTime + "] " + this.federate.federateName + "_FEDAMB Received Attribute Insert.");
+			// System.out.println("[" + this.federateTime + "] " +
+			// this.federate.federateName + "_FEDAMB Received Attribute Insert.");
 
 			// theAttributes (HashMap) contains elements of HLAvariableArray. The key is the
 			// object class handler
@@ -292,15 +293,23 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 			}
 			// If destination airport is this federate, update calendar with arrival
 			if (destEncoder.getValue().equals(this.federate.getCode())) {
-				System.out.println("[" + this.federateTime + "] " + this.federate.federateName + "_FEDAMB Received Attribute Insert.");
+				System.out.println("[" + this.federateTime + "] " + this.federate.federateName
+						+ "_FEDAMB Received Attribute Insert.");
 				// The local object is updated
 				// Create new airplane with source and destination airport switched
-				Airplane a = new Airplane(AirplaneState.LANDED, flightCodeDecoder.getValue(), airportEncoder.getValue(), destEncoder.getValue(), travelTimeEncoder.getValue());
+				Airplane a = new Airplane(AirplaneState.LANDED, flightCodeDecoder.getValue(), airportEncoder.getValue(),
+						destEncoder.getValue(), travelTimeEncoder.getValue());
 				// Decode reflect attribute event time
 				HLAinteger64Time theTimeDecoder = (HLAinteger64Time) theTime;
 				long arrivalTime = theTimeDecoder.getValue() - this.federateLookahead + travelTimeEncoder.getValue();
 				// Schedule new flight with event time - federate.lookahead + plane travel time
 				this.federate.addFlightToOperationalDay(arrivalTime, a);
+				// a local event corresponding to the remote one is added to the eventlist
+				this.federate.addEvent(new AirplaneEvent(EventType.LANDING_REQUEST, arrivalTime, a));
+				federate.addManagedAirplane(a);
+
+				System.out.println("[" + this.federateTime + "] " + this.federate.federateName
+						+ "_FEDAMB added a new LANDING REQUEST to the events list");
 			}
 			break;
 		default:
@@ -333,47 +342,48 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 			OrderType receivedOrdering, MessageRetractionHandle retractionHandle, SupplementalReceiveInfo receiveInfo)
 			throws FederateInternalError {
 
-		System.out.println("[" + this.federateTime + "] " + this.federate.federateName
-				+ "_FEDAMB Received Interaction. Create the following Local Event");
-
 		try {
 
 			// Airplane Record Decoder with its HLA fields
 			HLAfixedRecord airplaneRecordDecoder = federate.encoderFactory.createHLAfixedRecord();
 			HLAunicodeString flightCodeDecoder = federate.encoderFactory.createHLAunicodeString();
-			HLAunicodeString airportEncoder = federate.encoderFactory.createHLAunicodeString();
-			HLAunicodeString destEncoder = federate.encoderFactory.createHLAunicodeString();
-			HLAinteger64BE travelTimeEncoder = federate.encoderFactory.createHLAinteger64BE();
+			HLAunicodeString airportDecoder = federate.encoderFactory.createHLAunicodeString();
+			HLAunicodeString destDecoder = federate.encoderFactory.createHLAunicodeString();
+			HLAinteger64BE travelTimeDecoder = federate.encoderFactory.createHLAinteger64BE();
 			airplaneRecordDecoder.add(flightCodeDecoder);
-			airplaneRecordDecoder.add(airportEncoder);
-			airplaneRecordDecoder.add(destEncoder);
-			airplaneRecordDecoder.add(travelTimeEncoder);
+			airplaneRecordDecoder.add(airportDecoder);
+			airplaneRecordDecoder.add(destDecoder);
+			airplaneRecordDecoder.add(travelTimeDecoder);
 
-			HLAunicodeString typeEncoder = federate.encoderFactory.createHLAunicodeString();
+			HLAunicodeString typeDecoder = federate.encoderFactory.createHLAunicodeString();
 			// HLAinteger64BE timeEncoder = federate.encoderFactory.createHLAinteger64BE();
 
 			airplaneRecordDecoder.decode(theParameters.get(federate.airplaneHandle));
 			String flightCode = flightCodeDecoder.getValue();
-			typeEncoder.decode(theParameters.get(federate.typeHandle));
-			String type = typeEncoder.getValue();
+			typeDecoder.decode(theParameters.get(federate.typeHandle));
+			String type = typeDecoder.getValue();
 			// destEncoder.decode(theParameters.get(federate.airplaneHandle));
-			String destCode = destEncoder.getValue();
+			String destCode = destDecoder.getValue();
 			long eventTime = ((HLAinteger64Time) theTime).getValue();
 
-			System.out.println("\t interaction timestamp: " + eventTime);
-			System.out.println("\t flightCode: " + flightCode);
-			System.out.println("\t type: " + type);
-
 			if (destCode.equals(federate.getCode())) {
+				System.out.println("[" + this.federateTime + "] " + this.federate.federateName
+						+ "_FEDAMB Received Interaction. Create the following Local Event");
+				System.out.println("\t interaction timestamp: " + eventTime);
+				System.out.println("\t flightCode: " + flightCode);
+				System.out.println("\t type: " + type);
 				// the interaction must be handled
 
 				// a new airplane is added to the list of managed ones
-				Airplane a = new Airplane(AirplaneState.IN_FLIGHT, flightCode, airportEncoder.getValue(), destCode,
-						(int) travelTimeEncoder.getValue());
+				Airplane a = new Airplane(AirplaneState.IN_FLIGHT, flightCode, airportDecoder.getValue(), destCode,
+						travelTimeDecoder.getValue());
 				federate.addManagedAirplane(a);
 
 				// a local event corresponding to the remote one is added to the eventlist
 				federate.addEvent(new AirplaneEvent(EventType.LANDING_REQUEST, eventTime, a));
+
+				System.out.println("[" + this.federateTime + "] " + this.federate.federateName
+						+ "_FEDAMB added a new LANDING REQUEST to the events list");
 			}
 
 		} catch (DecoderException e) {

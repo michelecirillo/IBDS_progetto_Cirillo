@@ -33,9 +33,11 @@ Consideriamo le seguenti assunzioni e/o limitazioni:
 - Ogni aeroporto ha una torre di controllo che dà l'autorizzazione ad ogni aereo di 
 atterrare o decollare
 	- In caso le piste siano occupate, l'aereo che sta attendendo fa una nuova richiesta di decollo o atterraggio 
-	dopo un tempo predefinito.
+	dopo un tempo predefinito di 10 minuti.
 - L'uso della pista per il decollo e l'atterraggio richiede un tempo predefinito maggiore di 0.
 	- Assumiamo questo tempo sia di 10 minuti.
+- Un aereo dopo l'atterraggio, passa un tempo di 30 minuti al gate prima di partire 
+  di nuovo
 - Un aeroporto può schedulare soltanto una partenza (**departure**) verso un qualunque 
 altro aeroporto (del sistema o no).
 

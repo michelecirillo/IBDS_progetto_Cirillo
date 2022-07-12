@@ -3,6 +3,7 @@ package it.uniroma2.ibds.atms.federate;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.PriorityQueue;
@@ -229,12 +230,11 @@ public class Airport {
 
 	public void startFederate(String host) {
 
-		boolean simulationEnd = false;
 		LocalEvent event;
 		long nextEventTimestamp; // timestamp of the next event to be processed
 		long currentTime; // current logical time
 		long nextTime; // timestamp of the next evento to be schedulated
-		long timeStep = 50; // timestap used for determining the nextTime value
+		long timeStep = 10; // timestap used for determining the nextTime value
 
 		// Federate Initialization (items 1-9)
 		initFederate(host);
@@ -465,14 +465,14 @@ public class Airport {
 				System.out.println("[" + fedAmbassador.federateTime + "] TOWER: Flight" + plane.getFlightCode()
 						+ " clear for landing at runway " + runwayClear);
 				plane.setState(AirplaneState.LANDED);
-				nextEventTime = currentTime + timeStep;
 				// Once landed, schedule new clear runway event after timeStep time
-				addEvent(new RunwayEvent(EventType.RUNWAY_CLEARANCE_REQUEST, nextEventTime, runwayClear, true));
+				addEvent(
+						new RunwayEvent(EventType.RUNWAY_CLEARANCE_REQUEST, currentTime + timeStep, runwayClear, true));
 				// After LANDING, the flight departure (scheduling of TAKE_OFF_SCHEDULE event)
 				// is generated according to the predefined time TIMESTEP
 				System.out.println("[" + fedAmbassador.federateTime + "] TOWER: Flight" + plane.getFlightCode()
-						+ " prepare for take off at time " + nextEventTime);
-				addEvent(new AirplaneEvent(EventType.TAKE_OFF_REQUEST, nextEventTime, plane));
+						+ " prepare for take off at time " + (currentTime + 3 * timeStep));
+				addEvent(new AirplaneEvent(EventType.TAKE_OFF_REQUEST, currentTime + 3 * timeStep, plane));
 
 			} else {
 				// If runway is bysy, a new LANDING_REQUEST is generated at current time + 10
@@ -498,10 +498,12 @@ public class Airport {
 				// TAKE_OFF_REQUEST generates a remote event
 				// that is implemented as an interaction sent to the remote airport
 
-				// Switch source and destination airport of the plane
-				String sourceAirport = this.getCode();
-				plane.setAirport(plane.getDestinationAirport());
-				plane.setDestinationAirport(sourceAirport);
+				// Switch source and destination airport of the plane in return flight
+				if (plane.getDestinationAirport().equals(this.getCode())) {
+					String sourceAirport = plane.getAirport();
+					plane.setAirport(plane.getDestinationAirport());
+					plane.setDestinationAirport(sourceAirport);
+				}
 
 				// The airplane disappear from the tower radar
 				// (e.g., it is removed from the list of managed planes).
@@ -511,17 +513,18 @@ public class Airport {
 				nextEventTime = currentTime + plane.getTravelTime();
 				RemoteEvent re = new RemoteEvent(EventType.LANDING_REQUEST, nextEventTime, plane);
 				System.out.println("[" + fedAmbassador.federateTime + "] TOWER: Flight" + plane.getFlightCode()
-						+ " clear for take off. ");
+						+ " clear for take off from runway " + runwayClear);
 				System.out.println("Arrival to " + plane.getDestinationAirport() + " at time " + nextEventTime);
 				// Set runway clear after timeStep time
 				addEvent(
 						new RunwayEvent(EventType.RUNWAY_CLEARANCE_REQUEST, currentTime + timeStep, runwayClear, true));
 				// airplane is removed from the list of planes under the control of the Tower
 				this.managedAirplanes.remove(plane);
-				// Schedule departure from this airport
-				this.scheduleNewFlight(nextEventTime, plane);
 				// an interaction is sent to the remote airport federate
 				sendRemoteEvent(re);
+				//TODO Uno dei due
+				// Schedule departure from this airport
+//				this.scheduleNewFlight(nextEventTime, plane);
 			} else {
 				// If runway is bysy, a new TAKE_OFF_REQUEST is generated at current time + 10
 				// min
@@ -567,6 +570,7 @@ public class Airport {
 			// Airplane Record
 			HLAfixedRecord airplaneRecordEncoder = encoderFactory.createHLAfixedRecord();
 			airplaneRecordEncoder.add(flightEncoder);
+			airplaneRecordEncoder.add(airportEncoder);
 			airplaneRecordEncoder.add(destEncoder);
 			airplaneRecordEncoder.add(travelTimeEncoder);
 			parameters.put(this.airplaneHandle, airplaneRecordEncoder.toByteArray());
@@ -617,7 +621,7 @@ public class Airport {
 			// - objectclass handle is the key, the content is a byte stream generated from
 			// the attribute (HLAvariableArray element)
 			attributeValues.put(flightsScheduledHandle, flightsScheduledEncoder.toByteArray());
-			HLAinteger64Time time = timeFactory.makeTime(fedAmbassador.getFederateTime() + 5);
+			HLAinteger64Time time = timeFactory.makeTime(nextEventTime);
 			// Acquire ownership of flights scheduled of the OperationalDay Object Class
 			if (!rtiAmb.isAttributeOwnedByFederate(instanceODHandle, flightsScheduledHandle)) {
 				this.fedAmbassador.pendingAcquisition = true;
@@ -669,13 +673,13 @@ public class Airport {
 	private void displayFederateState() {
 		// ---------- 10 Simulation Main Loop ---------------
 		System.out.println("\n" + federateName + " Final State Summary");
-		System.out.println("Runway Clearance State: " + this.isRunwayClear);
+		System.out.println("Runway Clearance State: " + Arrays.toString(this.isRunwayClear));
 
 		System.out.println("Managed Airplanes:");
 		managedAirplanes.forEach((a) -> System.out.println(a.getFlightCode() + " " + a.getState()));
 
 		System.out.println("Events Queue: ");
-		Iterator i = this.eventsList.iterator();
+		Iterator<LocalEvent> i = this.eventsList.iterator();
 		LocalEvent le;
 		while (i.hasNext()) {
 			le = (LocalEvent) i.next();
@@ -683,10 +687,10 @@ public class Airport {
 		}
 
 		System.out.println("Flight remained: ");
-		Iterator flightsRemained = this.operationalDay.getFlightsScheduled();
+		Iterator<Airplane> flightsRemained = this.operationalDay.getFlightsScheduled();
 		Airplane plane;
 		while (flightsRemained.hasNext()) {
-			plane = (Airplane) flightsRemained.next();
+			plane = flightsRemained.next();
 			System.out.println(plane.getFlightCode());
 		}
 

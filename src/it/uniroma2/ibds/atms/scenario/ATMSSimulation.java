@@ -100,7 +100,7 @@ public class ATMSSimulation {
 				airportFederate.addEvent(new AirplaneEvent(EventType.TAKE_OFF_REQUEST, (long) 600, a4));
 
 			} else {
-				System.out.println("Airport Code Unknown");
+				throw new IllegalArgumentException("Airport Code Unknown");
 			}
 			break;
 		case 1:
