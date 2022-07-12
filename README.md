@@ -69,16 +69,11 @@ associato (FCO o LIN)
 - *Event* indica un generico evento
 	- *time* indica il timestamp dell'evento
 	- *type* indica il tipo dell'evento
-- _RemoteEvent_ indica un evento che un aeroporto genera per un altro
-	- *airplane* è l'aereo coinvolto nell'evento, che in questo caso sarà un evento di 
-	*landing request*
-- _LocalEvent_ indica un evento locale all'aeroporto
-	- *airplane* è l'aereo coinvolto nell'evento, che in questo caso sarà un evento di 
-	*take off request* o *landing request*, in caso la pista fosse occupata al momento 
-	dell'arrivo dell'aereo
-- _AirplaneEvent_ è l'evento di atterraggio o decollo che riguarda un aereo, il suo 
+- _LocalEvent_ indica un evento locale all'aeroporto, che può essere uno dei seguenti 
+due sottotipi:
+	- _AirplaneEvent_ è l'evento di atterraggio o decollo che riguarda un aereo, il suo 
   _EventType_ può essere quindi _LANDING_REQUEST_ o _TAKE_OFF_REQUEST_ 
- - _RunwayEvent_ è l'evento che cambia lo status (_clearance_) di una pista (_runway_), 
+ 	- _RunwayEvent_ è l'evento che cambia lo status (_clearance_) di una pista (_runway_), 
    il suo _EventType_ è quindi _RUNWAY_CLEARANCE_REQUEST_ 
 - _AirplaneStatus_ è un'enum che contiene tutti i possibili stati in cui può trovarsi un'aereo 
 della simulazione
@@ -152,8 +147,6 @@ Facciamo riferimento alle differenze del __federation design__ rispetto al __fed
 si tratta di un oggetto, nella concezione di oggetto HLA
 - Sono state aggiunte le classi _rtiAmbassador_ e _FederateAmbassadorImpl_ che sono le classi che implementano la 
 logica di comunicazione tra federati in una federazione HLA
-- A _RemoteEvent_ è stato aggiunto lo stereotipo \<\<InteractionClass>> per denotare che si tratta di una 
-interazione tra federati, nella concezione di interazione HLA.
 
 Le restanti classi rimaste invariate verranno implementate nella concezione del classico 
 modello a oggetti.
@@ -173,11 +166,6 @@ accordo con l'**OMT** (Object Model Template), producendo un **FOM** (Federation
 |----|----|----|----|---|---|----|
 |operationalDay|date|DateArray|Static|N|N|Timestamp|
 |operationalDay|flightsScheduled|FlightScheduledRecord|Static|N|P/S|Timestamp|
-
-## Interaction Class
-|InteractionClass|Superclass|Sharing|Order|
-|----|----|---|----|
-|RemoteEvent|HLAinteractionRoot|P/S|Timestamp|
 
 ## Interaction Parameters Table
 |Interaction|Name|Type|Order|

@@ -83,22 +83,8 @@ type: EventType</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>280</x>
-      <y>480</y>
-      <w>150</w>
-      <h>70</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;InteractionClass&gt;&gt;
-RemoteEvent
---
-airplane: Airplane</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>540</x>
-      <y>500</y>
+      <x>420</x>
+      <y>490</y>
       <w>160</w>
       <h>70</h>
     </coordinates>
@@ -109,37 +95,26 @@ airplane: Airplane</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>480</x>
+      <x>490</x>
       <y>420</y>
-      <w>170</w>
-      <h>100</h>
+      <w>30</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0;150.0;50.0;150.0;80.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>340</x>
-      <y>420</y>
-      <w>170</w>
-      <h>80</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>150.0;10.0;150.0;50.0;10.0;50.0;10.0;60.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>180</x>
       <y>440</y>
-      <w>380</w>
-      <h>150</h>
+      <w>260</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 r1=eventsList
 m1=*</panel_attributes>
-    <additional_attributes>360.0;120.0;40.0;120.0;40.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>240.0;90.0;40.0;90.0;40.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -213,18 +188,6 @@ operationalDay
 --
 date: Date</panel_attributes>
     <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>180</x>
-      <y>410</y>
-      <w>160</w>
-      <h>90</h>
-    </coordinates>
-    <panel_attributes>lt=.&gt;
-&lt;&lt;generates&gt;&gt;</panel_attributes>
-    <additional_attributes>10.0;20.0;140.0;20.0;140.0;70.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
@@ -306,7 +269,7 @@ r1=fedAmbassador</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>450</x>
+      <x>300</x>
       <y>620</y>
       <w>140</w>
       <h>70</h>
@@ -319,7 +282,7 @@ airplane: Airplane</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>660</x>
+      <x>560</x>
       <y>620</y>
       <w>150</w>
       <h>70</h>
@@ -333,23 +296,23 @@ cleareance: boolean</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>510</x>
-      <y>560</y>
-      <w>130</w>
-      <h>80</h>
+      <x>360</x>
+      <y>550</y>
+      <w>160</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>110.0;10.0;110.0;40.0;10.0;40.0;10.0;60.0</additional_attributes>
+    <additional_attributes>140.0;10.0;140.0;50.0;10.0;50.0;10.0;70.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>610</x>
-      <y>560</y>
-      <w>140</w>
-      <h>80</h>
+      <x>490</x>
+      <y>550</y>
+      <w>160</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;40.0;120.0;40.0;120.0;60.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0;140.0;50.0;140.0;70.0</additional_attributes>
   </element>
 </diagram>

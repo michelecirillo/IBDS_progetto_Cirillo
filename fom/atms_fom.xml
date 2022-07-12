@@ -26,33 +26,7 @@
 			</objectClass>
 		</objectClass>
 	</objects>
-	<interactions>
-		<interactionClass>
-			<name>HLAinteractionRoot</name>
-			<interactionClass>
-				<name>RemoteEvent</name>
-				<sharing>PublishSubscribe</sharing>
-				<transportation>HLAbestEffort</transportation>
-				<order>TimeStamp</order>
-				<semantics>Remote Event which is sent to notify the destination (remote) airport 
-				that an airplane is approaching and must be taken under control by the Tower. 
-				Wraps a local event which has to be generated when the interaction is received</semantics>
-				<parameter>
-					<name>type</name>
-					<dataType>EventType</dataType>
-					<order>TimeStamp</order>
-					<semantics>Event to be scheduled when the approaching airplane is taken
-					under control by the destination airport Tower</semantics>
-				</parameter>
-				<parameter>
-					<name>airplane</name>
-					<dataType>AirplaneRecord</dataType>
-					<order>TimeStamp</order>
-					<semantics>Approaching airplane</semantics>
-				</parameter>
-			</interactionClass>
-		</interactionClass>
-	</interactions>
+	<interactions />
 	<dimensions />
 	<synchronizations>
 		<synchronizationPoint>

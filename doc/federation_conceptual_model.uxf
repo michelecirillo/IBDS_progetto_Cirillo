@@ -4,7 +4,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>80</x>
+      <x>70</x>
       <y>380</y>
       <w>160</w>
       <h>60</h>
@@ -16,7 +16,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>80</x>
+      <x>70</x>
       <y>190</y>
       <w>170</w>
       <h>90</h>
@@ -30,7 +30,7 @@ runway: Boolean[2]</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>150</x>
+      <x>140</x>
       <y>270</y>
       <w>40</w>
       <h>130</h>
@@ -43,7 +43,7 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>240</x>
+      <x>230</x>
       <y>20</y>
       <w>240</w>
       <h>50</h>
@@ -56,7 +56,7 @@ m2=*</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>490</x>
+      <x>480</x>
       <y>160</y>
       <w>140</w>
       <h>90</h>
@@ -70,44 +70,43 @@ type: EventType</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>320</y>
+      <x>470</x>
+      <y>290</y>
       <w>160</w>
       <h>70</h>
     </coordinates>
     <panel_attributes>/LocalEvent/
---
-airplane: Airplane</panel_attributes>
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>550</x>
+      <x>540</x>
       <y>240</y>
       <w>30</w>
-      <h>100</h>
+      <h>70</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>240</x>
+      <x>230</x>
       <y>260</y>
       <w>260</w>
-      <h>150</h>
+      <h>100</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 r1=eventsList
 m1=*</panel_attributes>
-    <additional_attributes>240.0;120.0;40.0;120.0;40.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>240.0;70.0;40.0;70.0;40.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>460</x>
+      <x>450</x>
       <y>0</y>
       <w>210</w>
       <h>110</h>
@@ -123,7 +122,7 @@ travelTime: Int
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>150</x>
+      <x>140</x>
       <y>70</y>
       <w>40</w>
       <h>140</h>
@@ -135,7 +134,7 @@ m2=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>720</x>
+      <x>710</x>
       <y>50</y>
       <w>190</w>
       <h>90</h>
@@ -150,7 +149,7 @@ LANDED</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>680</x>
+      <x>670</x>
       <y>160</y>
       <w>230</w>
       <h>100</h>
@@ -166,7 +165,7 @@ RUNWAY_CLEARANCE_REQUEST</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>80</x>
+      <x>70</x>
       <y>0</y>
       <w>170</w>
       <h>80</h>
@@ -179,7 +178,7 @@ date: Date</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>240</x>
+      <x>230</x>
       <y>70</y>
       <w>240</w>
       <h>170</h>
@@ -205,7 +204,7 @@ airplane: Airplane</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>620</x>
+      <x>610</x>
       <y>430</y>
       <w>160</w>
       <h>70</h>
@@ -220,22 +219,22 @@ clearance: boolean</panel_attributes>
     <id>Relation</id>
     <coordinates>
       <x>410</x>
-      <y>380</y>
-      <w>170</w>
-      <h>70</h>
+      <y>350</y>
+      <w>160</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>150.0;10.0;150.0;30.0;10.0;30.0;10.0;50.0</additional_attributes>
+    <additional_attributes>140.0;10.0;140.0;60.0;10.0;60.0;10.0;80.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>550</x>
-      <y>380</y>
+      <x>540</x>
+      <y>350</y>
       <w>170</w>
-      <h>70</h>
+      <h>100</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;30.0;150.0;30.0;150.0;50.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;150.0;60.0;150.0;80.0</additional_attributes>
   </element>
 </diagram>
