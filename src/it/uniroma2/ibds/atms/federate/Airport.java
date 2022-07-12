@@ -520,11 +520,8 @@ public class Airport {
 						new RunwayEvent(EventType.RUNWAY_CLEARANCE_REQUEST, currentTime + timeStep, runwayClear, true));
 				// airplane is removed from the list of planes under the control of the Tower
 				this.managedAirplanes.remove(plane);
-				// an interaction is sent to the remote airport federate
-				sendRemoteEvent(re);
-				//TODO Uno dei due
 				// Schedule departure from this airport
-//				this.scheduleNewFlight(nextEventTime, plane);
+				this.scheduleNewFlight(nextEventTime, plane);
 			} else {
 				// If runway is bysy, a new TAKE_OFF_REQUEST is generated at current time + 10
 				// min
