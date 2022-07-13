@@ -116,9 +116,9 @@ public class ATMSSimulation {
 
 			} else if (airportCode == "LIN") {
 				// LINATE Airport, clear runways, 5 managed plane, 5 initial event
-				Airplane a1 = new Airplane(AirplaneState.LANDED, "AZ001", "LIN", "FCO", 30);
+				Airplane a1 = new Airplane(AirplaneState.LANDED, "AZ001", "LIN", "FCO", 40);
 				Airplane a2 = new Airplane(AirplaneState.LANDED, "AZ002", "LIN", "NAP", 30);
-				Airplane a5 = new Airplane(AirplaneState.LANDED, "AZ005", "LIN", "FCO", 30);
+				Airplane a5 = new Airplane(AirplaneState.LANDED, "AZ005", "LIN", "FCO", 40);
 				Airplane a6 = new Airplane(AirplaneState.LANDED, "AZ006", "LIN", "FCO", 30);
 				Airplane a7 = new Airplane(AirplaneState.IN_FLIGHT, "AZ007", "FCO", "LIN", 30);
 

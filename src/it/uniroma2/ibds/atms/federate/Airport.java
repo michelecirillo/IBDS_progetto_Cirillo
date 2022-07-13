@@ -15,11 +15,8 @@ import hla.rti1516e.AttributeHandleSet;
 import hla.rti1516e.AttributeHandleValueMap;
 import hla.rti1516e.CallbackModel;
 import hla.rti1516e.FederateHandle;
-import hla.rti1516e.InteractionClassHandle;
 import hla.rti1516e.ObjectClassHandle;
 import hla.rti1516e.ObjectInstanceHandle;
-import hla.rti1516e.ParameterHandle;
-import hla.rti1516e.ParameterHandleValueMap;
 import hla.rti1516e.RTIambassador;
 import hla.rti1516e.ResignAction;
 import hla.rti1516e.RtiFactoryFactory;
@@ -62,8 +59,8 @@ import it.uniroma2.ibds.atms.scenario.AirplaneState;
 
 /**
  * 
- * In this version, each airport has an OperationalDay HLAObjectClass that can generate a new event:
- * both local and remote to the other airport
+ * In this version, each airport has an OperationalDay HLAObjectClass that can
+ * generate a new event: both local and remote to the other airport
  * 
  */
 
@@ -130,6 +127,7 @@ public class Airport {
 
 	/**
 	 * Add new event to the local events list
+	 * 
 	 * @param e event to add
 	 */
 	public void addEvent(LocalEvent e) {
@@ -138,6 +136,7 @@ public class Airport {
 
 	/**
 	 * Get next event from the queue
+	 * 
 	 * @return next event to be processed
 	 */
 	private LocalEvent getNextEvent() {
@@ -146,6 +145,7 @@ public class Airport {
 
 	/**
 	 * Add new airplane to the airport managed airplanes
+	 * 
 	 * @param a airplane to be added
 	 */
 	public void addManagedAirplane(Airplane a) {
@@ -204,7 +204,7 @@ public class Airport {
 
 	/**
 	 * @param index runway index that we want set status
-	 * @param state to be set in runway selected 
+	 * @param state to be set in runway selected
 	 */
 	public void setRunwayClearance(int index, boolean state) {
 		this.isRunwayClear[index] = state;
@@ -559,9 +559,11 @@ public class Airport {
 				while (fedAmbassador.pendingAcquisition)
 					Thread.sleep(10);
 			}
+			
 			// update attribute
 			rtiAmb.updateAttributeValues(instanceODHandle, attributeValues,
 					OperationalDay.UpdateType.INSERT.name().getBytes(), time);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -618,8 +620,8 @@ public class Airport {
 
 		System.out.println("Flights remained: ");
 		SortedMap<Long, Airplane> flightsRemained = this.operationalDay.getFlightsScheduled();
-		flightsRemained.tailMap(this._simulationEndTime+1).forEach((time, airplane) -> {
-			System.out.println("<" + time + "," + airplane.getFlightCode()+">");
+		flightsRemained.tailMap(this._simulationEndTime + 1).forEach((time, airplane) -> {
+			System.out.println("<" + time + "," + airplane.getFlightCode() + ">");
 		});
 
 	}
