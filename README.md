@@ -132,7 +132,6 @@ e le *interazioni* tra i federati che compongono la *federazione*.
 |Airport|Federate|
 |operationalDay|ObjectClass|
 |Airplane|Not mapped (local entity)|
-|Airplane that flyies from one airport to the other|InteractionClass|
 
 # Detailed Design
 

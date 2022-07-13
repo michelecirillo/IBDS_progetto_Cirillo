@@ -343,56 +343,7 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 			byte[] userSuppliedTag, OrderType sentOrdering, TransportationTypeHandle theTransport, LogicalTime theTime,
 			OrderType receivedOrdering, MessageRetractionHandle retractionHandle, SupplementalReceiveInfo receiveInfo)
 			throws FederateInternalError {
-
-		try {
-
-			// Airplane Record Decoder with its HLA fields
-			HLAfixedRecord airplaneRecordDecoder = federate.encoderFactory.createHLAfixedRecord();
-			HLAunicodeString flightCodeDecoder = federate.encoderFactory.createHLAunicodeString();
-			HLAunicodeString airportDecoder = federate.encoderFactory.createHLAunicodeString();
-			HLAunicodeString destDecoder = federate.encoderFactory.createHLAunicodeString();
-			HLAinteger64BE travelTimeDecoder = federate.encoderFactory.createHLAinteger64BE();
-			airplaneRecordDecoder.add(flightCodeDecoder);
-			airplaneRecordDecoder.add(airportDecoder);
-			airplaneRecordDecoder.add(destDecoder);
-			airplaneRecordDecoder.add(travelTimeDecoder);
-
-			HLAunicodeString typeDecoder = federate.encoderFactory.createHLAunicodeString();
-			// HLAinteger64BE timeEncoder = federate.encoderFactory.createHLAinteger64BE();
-
-			airplaneRecordDecoder.decode(theParameters.get(federate.airplaneHandle));
-			String flightCode = flightCodeDecoder.getValue();
-			typeDecoder.decode(theParameters.get(federate.typeHandle));
-			String type = typeDecoder.getValue();
-			// destEncoder.decode(theParameters.get(federate.airplaneHandle));
-			String destCode = destDecoder.getValue();
-			long eventTime = ((HLAinteger64Time) theTime).getValue();
-
-			if (destCode.equals(federate.getCode())) {
-				System.out.println("[" + this.federateTime + "] " + this.federate.federateName
-						+ "_FEDAMB Received Interaction. Create the following Local Event");
-				System.out.println("\t interaction timestamp: " + eventTime);
-				System.out.println("\t flightCode: " + flightCode);
-				System.out.println("\t type: " + type);
-				// the interaction must be handled
-
-				// a new airplane is added to the list of managed ones
-				Airplane a = new Airplane(AirplaneState.IN_FLIGHT, flightCode, airportDecoder.getValue(), destCode,
-						travelTimeDecoder.getValue());
-				federate.addManagedAirplane(a);
-
-				// a local event corresponding to the remote one is added to the eventlist
-				federate.addEvent(new AirplaneEvent(EventType.LANDING_REQUEST, eventTime, a));
-
-				System.out.println("[" + this.federateTime + "] " + this.federate.federateName
-						+ "_FEDAMB added a new LANDING REQUEST to the events list");
-			}
-
-		} catch (DecoderException e) {
-			// System.out.println("Failed to decode incoming interaction");
-			e.printStackTrace();
-		}
-
+		super.receiveInteraction(interactionClass, theParameters, userSuppliedTag, sentOrdering, theTransport, theTime, receivedOrdering, retractionHandle, receiveInfo);
 	}
 
 	@Override
