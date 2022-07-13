@@ -297,6 +297,7 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 				this.federate.addFlightToOperationalDay(arrivalTime, a);
 				// a local event corresponding to the remote one is added to the events list
 				this.federate.addEvent(new AirplaneEvent(EventType.LANDING_REQUEST, arrivalTime, a));
+				// Add flight to the managed airplanes of this airport
 				federate.addManagedAirplane(a);
 
 				System.out.println("[" + this.federateTime + "] " + this.federate.federateName
