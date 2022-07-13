@@ -317,6 +317,7 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 				// a new airplane is added to the list of managed ones
 				Airplane a = new Airplane(AirplaneState.IN_FLIGHT, flightCode, airportDecoder.getValue(), destCode,
 						travelTimeDecoder.getValue());
+				// Add flight to the managed airplanes of this airport
 				federate.addManagedAirplane(a);
 
 				// a local event corresponding to the remote one is added to the events list
