@@ -6,7 +6,6 @@ import java.util.Date;
 
 import it.uniroma2.ibds.atms.events.AirplaneEvent;
 import it.uniroma2.ibds.atms.events.EventType;
-import it.uniroma2.ibds.atms.events.LocalEvent;
 import it.uniroma2.ibds.atms.federate.Airport;
 import it.uniroma2.ibds.atms.federate.OperationalDay;
 
@@ -15,7 +14,6 @@ public class ATMSSimulation {
 	// Scenario
 	private Airport airportFederate;
 	private int day = 0;
-	private static int _seed = 67;
 	// We consider simulation time as minutes, so, in order to simulate from 5:00 AM
 	// to 11:00 PM, we set simulation end time as 18*60=1080
 	private static long _simulationEndTIme = 1080;
@@ -61,7 +59,7 @@ public class ATMSSimulation {
 			e.printStackTrace();
 		}
 
-		airportFederate = new Airport(airportCode, n_runways, calendar[day], _seed, _simulationEndTIme);
+		airportFederate = new Airport(airportCode, n_runways, calendar[day], _simulationEndTIme);
 
 		// Scenario Configuration
 		initScenario(airportCode);
@@ -77,7 +75,7 @@ public class ATMSSimulation {
 		switch (day) {
 		case 0:
 			if (airportCode == "FCO") {
-				// Fiumicino Airport, busy runways, 2 managed planes, 3 initial events
+				// Fiumicino Airport, clear runways, 2 managed planes, 4 initial events
 				Airplane a1 = new Airplane(AirplaneState.LANDED, "AZ001", "FCO", "LIN", 30);
 				Airplane a2 = new Airplane(AirplaneState.LANDED, "AZ002", "FCO", "NAP", 30);
 				Airplane a5 = new Airplane(AirplaneState.IN_FLIGHT, "AZ005", "LIN", "FCO", 30);
@@ -105,7 +103,7 @@ public class ATMSSimulation {
 			break;
 		case 1:
 			if (airportCode == "FCO") {
-				// Fiumicino Airport, busy runways, 2 managed planes, 1 initial event
+				// Fiumicino Airport, clear runways, 2 managed planes, 1 initial event
 				Airplane a3 = new Airplane(AirplaneState.IN_FLIGHT, "AZ003", "LIN", "FCO", 30);
 				Airplane a4 = new Airplane(AirplaneState.LANDED, "AZ004", "FCO", "LIN", 30);
 
@@ -115,7 +113,7 @@ public class ATMSSimulation {
 				airportFederate.addEvent(new AirplaneEvent(EventType.LANDING_REQUEST, (long) 720, a3));
 
 			} else if (airportCode == "LIN") {
-				// LINATE Airport, clear runways, 1 managed plane, 1 initial event
+				// LINATE Airport, clear runways, 5 managed plane, 5 initial event
 				Airplane a1 = new Airplane(AirplaneState.LANDED, "AZ001", "LIN", "FCO", 30);
 				Airplane a2 = new Airplane(AirplaneState.LANDED, "AZ002", "LIN", "NAP", 30);
 				Airplane a5 = new Airplane(AirplaneState.LANDED, "AZ005", "LIN", "FCO", 30);

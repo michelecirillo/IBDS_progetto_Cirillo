@@ -10,14 +10,9 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.SortedMap;
 
-import hla.rti1516e.AttributeHandle;
-import hla.rti1516e.AttributeHandleSet;
-import hla.rti1516e.AttributeHandleValueMap;
 import hla.rti1516e.CallbackModel;
 import hla.rti1516e.FederateHandle;
 import hla.rti1516e.InteractionClassHandle;
-import hla.rti1516e.ObjectClassHandle;
-import hla.rti1516e.ObjectInstanceHandle;
 import hla.rti1516e.ParameterHandle;
 import hla.rti1516e.ParameterHandleValueMap;
 import hla.rti1516e.RTIambassador;
@@ -62,26 +57,10 @@ import it.uniroma2.ibds.atms.scenario.AirplaneState;
 
 /**
  * 
- * The federate structure is structured as follows:
+ * In this version, a take off request in an airport generates a remote event sending to
+ * the other airport. RemoteEvent is a HLA Interaction Class.
+ * OperationalDay is a simply Java Class.
  * 
- * InitFederate Method 1. Create the RTIambassador 2. Connect to the
- * RTIamsassador 3. Try to create the federation 4. Join the federation 5.
- * Announce a Synchronization Point 6. Enable Time Regulation and Constrained 7.
- * Publish and Subscribe 8. Wait for the federation to Synchronized on the point
- * 9. Register an Object Instance
- * 
- * 
- * StartFederate Method 10. Simulation Main Loop Determine the needed time
- * advancing (next event timestamp or fixed timestep) Ask a Next Message Time
- * Advance Wait for the Time Advance Grant Process the first event in the Event
- * List (if available) Once during the simulation: LIN acquires blacklist
- * ownership and updates the Black List
- * 
- * 
- * DisplayFederateState Method 11. Summarize Federate final state
- * 
- * LeaveFederation Method 12. Resign from Federation and 13. Destroy the
- * federation
  */
 
 public class Airport {
@@ -101,7 +80,6 @@ public class Airport {
 	private OperationalDay operationalDay;
 
 	// simulation properties
-	private int _seed;
 	private long _simulationEndTime;
 
 	// HLA-related properties
@@ -119,12 +97,11 @@ public class Airport {
 	protected ParameterHandle airplaneHandle;
 	protected ParameterHandle typeHandle;
 
-	public Airport(String code, int runwaysLength, OperationalDay operationalDay, int seed, long endTime) {
+	public Airport(String code, int runwaysLength, OperationalDay operationalDay, long endTime) {
 		this.code = code;
 		this.managedAirplanes = new HashSet<Airplane>();
 		eventsList = new PriorityQueue<LocalEvent>();
 		federateName = code + "_Airport";
-		this._seed = seed;
 		this._simulationEndTime = endTime;
 		this.operationalDay = operationalDay;
 		this.isRunwayClear = new Boolean[runwaysLength];
@@ -139,15 +116,27 @@ public class Airport {
 	public void scheduleNewFlight(long nextEventTime, Airplane a) {
 		this.operationalDay.scheduleNewFlight(nextEventTime, a);
 	}
-
+	
+	/**
+	 * Add new event to the local events list
+	 * @param e event to add
+	 */
 	public void addEvent(LocalEvent e) {
 		this.eventsList.add(e);
 	}
 
+	/**
+	 * Get next event from the queue
+	 * @return next event to be processed
+	 */
 	private LocalEvent getNextEvent() {
 		return this.eventsList.peek();
 	}
 
+	/**
+	 * Add new airplane to the airport managed airplanes
+	 * @param a airplane to be added
+	 */
 	public void addManagedAirplane(Airplane a) {
 		this.managedAirplanes.add(a);
 
@@ -161,7 +150,7 @@ public class Airport {
 	}
 
 	/**
-	 * @return the code
+	 * @return airport code
 	 */
 	public String getCode() {
 		return code;
@@ -183,8 +172,8 @@ public class Airport {
 	}
 
 	/**
-	 * @param num Numero della pista di cui si vuole sapere se è occupata o no
-	 * @return Stato della num° pista
+	 * @param num number of runway that we want check the clearance
+	 * @return runway num status
 	 */
 	public boolean isRunwayClear(int num) {
 		if (num >= isRunwayClear.length)
@@ -193,7 +182,7 @@ public class Airport {
 	}
 
 	/**
-	 * @return l'indice di una qualsiasi pista libera, o -1 se sono tutte occupate.
+	 * @return index of a clear runway, or -1 is every runway is busy
 	 */
 	public int runwayClear() {
 		for (int i = 0; i < isRunwayClear.length; i++) {
@@ -204,8 +193,8 @@ public class Airport {
 	}
 
 	/**
-	 * @param index indice della pista di cui settare lo stato
-	 * @param state stato da settare alla pista numero index
+	 * @param index runway index that we want set status
+	 * @param state to be set in runway selected 
 	 */
 	public void setRunwayClearance(int index, boolean state) {
 		this.isRunwayClear[index] = state;
@@ -232,7 +221,7 @@ public class Airport {
 
 				if (!eventsList.isEmpty()) {
 
-					nextEventTimestamp = eventsList.peek().getTime();
+					nextEventTimestamp = this.getNextEvent().getTime();
 					System.out.println("[" + fedAmbassador.federateTime + "] " + federateName + ": Next Message Time: "
 							+ nextEventTimestamp);
 
@@ -252,7 +241,7 @@ public class Airport {
 						Thread.sleep(10);
 					System.out.println("[" + fedAmbassador.federateTime + "] " + federateName + ": Time Advance Grant");
 
-					event = eventsList.peek();
+					event = this.getNextEvent();
 
 					// process event
 					process(event);
