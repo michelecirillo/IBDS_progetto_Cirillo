@@ -52,7 +52,6 @@ import hla.rti1516e.time.HLAinteger64TimeFactory;
 import it.uniroma2.ibds.atms.events.AirplaneEvent;
 import it.uniroma2.ibds.atms.events.EventType;
 import it.uniroma2.ibds.atms.events.LocalEvent;
-import it.uniroma2.ibds.atms.events.RemoteEvent;
 import it.uniroma2.ibds.atms.events.RunwayEvent;
 import it.uniroma2.ibds.atms.scenario.Airplane;
 import it.uniroma2.ibds.atms.scenario.AirplaneState;
@@ -221,7 +220,7 @@ public class Airport {
 		// Federate Initialization
 		initFederate(host);
 
-		// ---------- 10 Simulation Main Loop ---------------
+		// ---------- Simulation Main Loop ---------------
 		System.out.println("\n" + "___________________________________________");
 		System.out.println("Simulation Begins....");
 		System.out.println("[" + fedAmbassador.federateTime + "] " + federateName + ": Simulation Start ");
@@ -283,7 +282,7 @@ public class Airport {
 		System.out.println("Starting of " + getFederateName());
 
 		try {
-			// ---------- 1 & 2 create RTIambassador and Connect---------------
+			// ---------- create RTIambassador and Connect---------------
 
 			rtiAmb = RtiFactoryFactory.getRtiFactory().getRtiAmbassador();
 			encoderFactory = RtiFactoryFactory.getRtiFactory().getEncoderFactory();
@@ -294,7 +293,7 @@ public class Airport {
 
 			System.out.println("Connected to RTI");
 
-			// ---------------- 3 create Federation Execution -------------------
+			// ---------------- create Federation Execution -------------------
 
 			URL[] fom = new URL[] { (new File("fom/atms_fom.xml")).toURI().toURL(), };// FOM
 
@@ -323,11 +322,11 @@ public class Airport {
 
 		try {
 
-			// ---------------------- 4 Join Federation -----------------------
+			// ---------------------- Join Federation -----------------------
 			rtiAmb.joinFederationExecution(getFederateName(), FEDERATION_NAME);
 			System.out.println("Joined Federation as " + getFederateName());
 
-			// -------------- 5 Sync Points Registering ----------------
+			// -------------- Sync Points Registering ----------------
 
 			/*
 			 * We need to artificially block the federate execution here for showing how
@@ -359,7 +358,7 @@ public class Airport {
 			while (!fedAmbassador.isAnnounced)
 				Thread.sleep(10);
 
-			// ---------------------- 6 Time Management -------------------------
+			// ---------------------- Time Management -------------------------
 
 			// Federates are both time-regulated and time-constrained
 			timeFactory = (HLAinteger64TimeFactory) rtiAmb.getTimeFactory();
@@ -378,7 +377,7 @@ public class Airport {
 			}
 			System.out.println(federateName + " is Time Constrained");
 
-			// ---------------------- 7 Publish & Subscribe -------------------------
+			// ---------------------- Publish & Subscribe -------------------------
 
 			// Object classes and Attributes
 			this.ocOperationalDayHandle = rtiAmb.getObjectClassHandle("HLAobjectRoot.OperationalDay");
@@ -386,12 +385,11 @@ public class Airport {
 			attributes = rtiAmb.getAttributeHandleSetFactory().create();
 			attributes.add(flightsScheduledHandle);
 
-			// Both LIN and FCO publish the operional day scheduled flights
+			// Both LIN and FCO publish the operational day scheduled flights
 			rtiAmb.publishObjectClassAttributes(ocOperationalDayHandle, attributes);
 			rtiAmb.subscribeObjectClassAttributes(ocOperationalDayHandle, attributes);
 
-			// --------------------- 8 Synchronization Before Running
-			// -----------------------
+			// --------------------- Synchronization Before Running -----------------------
 
 			// Sync point reached. The federate must wait other federates
 			rtiAmb.synchronizationPointAchieved("ReadyToRun");
@@ -399,7 +397,8 @@ public class Airport {
 				Thread.sleep(10);
 			System.out.println(federateName + " All Federates achieved READY_TO_RUN Sync Point");
 
-			// --------------------- 9 Register Object Instance -----------------------
+			// --------------------- Register Object Instance -----------------------
+			// Both LIN and FCO register the operational day scheduled flights
 			this.instanceODHandle = rtiAmb.registerObjectInstance(ocOperationalDayHandle);
 
 		} catch (FederationExecutionDoesNotExist | SaveInProgress | RestoreInProgress | FederateAlreadyExecutionMember
@@ -447,8 +446,8 @@ public class Airport {
 				addEvent(new AirplaneEvent(EventType.TAKE_OFF_REQUEST, currentTime + 3 * timeStep, plane));
 
 			} else {
-				// If runway is bysy, a new LANDING_REQUEST is generated at current time + 10
-				// min
+				// If runway is bysy, a new LANDING_REQUEST is generated at current time + time
+				// step minutes
 				System.out.println("[" + fedAmbassador.federateTime + "] TOWER: Flight" + plane.getFlightCode()
 						+ " NOT clear for landing ");
 				nextEventTime = currentTime + timeStep;
@@ -479,11 +478,11 @@ public class Airport {
 
 				// The airplane disappear from the tower radar
 				// (e.g., it is removed from the list of managed planes).
-				// A remote event "LANDING_REQUEST" is scheduled (e.g. a interaction is sent).
+				// A remote event "LANDING_REQUEST" is scheduled (e.g. a new record of
+				// operational day is added).
 				// Its arrival time at the remote airport is current time + travelTime of the
 				// airplane
 				nextEventTime = currentTime + plane.getTravelTime();
-				RemoteEvent re = new RemoteEvent(EventType.LANDING_REQUEST, nextEventTime, plane);
 				System.out.println("[" + fedAmbassador.federateTime + "] TOWER: Flight" + plane.getFlightCode()
 						+ " clear for take off from runway " + runwayClear);
 				System.out.println("Arrival to " + plane.getDestinationAirport() + " at time " + nextEventTime);
@@ -495,8 +494,8 @@ public class Airport {
 				// Schedule departure from this airport
 				this.scheduleNewFlight(nextEventTime, plane);
 			} else {
-				// If runway is bysy, a new TAKE_OFF_REQUEST is generated at current time + 10
-				// min
+				// If runway is bysy, a new TAKE_OFF_REQUEST is generated at current time + time
+				// step minutes
 				System.out.println("[" + fedAmbassador.federateTime + "] TOWER: Flight" + plane.getFlightCode()
 						+ " NOT clear for departure ");
 				nextEventTime = currentTime + timeStep;
@@ -518,10 +517,8 @@ public class Airport {
 	}
 
 	private void notifyOperationalDayInsert(long nextEventTime, Airplane a) {
-		// HLAvariableArray element used for encoding the flightsList attribute (of type
-		// Ariplane)
-		// HLAunicodeString element is used for encoding the atomic elements of the List
-		// are HLAunicodeString (list see FOM)
+		// HLAfixedRecord element used for encoding the flightScheduled attribute
+		// which includes timeScheduled and a HLAfixedRecord airplaneRecord
 		HLAfixedRecord flightsScheduledEncoder = encoderFactory.createHLAfixedRecord();
 		HLAfixedRecord airplaneRecordEncoder = encoderFactory.createHLAfixedRecord();
 		HLAinteger64BE timeScheduledEncoder = encoderFactory.createHLAinteger64BE();
@@ -559,7 +556,7 @@ public class Airport {
 				while (fedAmbassador.pendingAcquisition)
 					Thread.sleep(10);
 			}
-			
+
 			// update attribute
 			rtiAmb.updateAttributeValues(instanceODHandle, attributeValues,
 					OperationalDay.UpdateType.INSERT.name().getBytes(), time);
@@ -572,7 +569,7 @@ public class Airport {
 
 	private void leaveSimulationExecution() {
 
-		// ---------- 10 Simulation Main Loop ---------------
+		// ---------- Simulation Main Loop ---------------
 
 		try {
 			rtiAmb.resignFederationExecution(ResignAction.DELETE_OBJECTS);
@@ -619,8 +616,9 @@ public class Airport {
 		}
 
 		System.out.println("Flights remained: ");
-		SortedMap<Long, Airplane> flightsRemained = this.operationalDay.getFlightsScheduled();
-		flightsRemained.tailMap(this._simulationEndTime + 1).forEach((time, airplane) -> {
+		SortedMap<Long, Airplane> flightsRemained = this.operationalDay.getFlightsScheduled()
+				.tailMap(this._simulationEndTime + 1);
+		flightsRemained.forEach((time, airplane) -> {
 			System.out.println("<" + time + "," + airplane.getFlightCode() + ">");
 		});
 

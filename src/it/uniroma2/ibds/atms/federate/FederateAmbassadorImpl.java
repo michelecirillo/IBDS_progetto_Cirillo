@@ -260,16 +260,6 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 		OperationalDay.UpdateType tag = OperationalDay.UpdateType.valueOf(new String(userSuppliedTag));
 		switch (tag) {
 		case INSERT:
-			// System.out.println("[" + this.federateTime + "] " +
-			// this.federate.federateName + "_FEDAMB Received Attribute Insert.");
-
-			// theAttributes (HashMap) contains elements of HLAvariableArray. The key is the
-			// object class handler
-
-			// HLAvariableArray element used for encoding the flightsList attribute (of type
-			// Ariplane)
-			// HLAvariableArray flightsScheduledListDecoder =
-			// federate.encoderFactory.createHLAvariableArray(factory);
 			HLAfixedRecord flightScheduledDecoder = federate.encoderFactory.createHLAfixedRecord();
 			HLAinteger64BE timeDecoder = federate.encoderFactory.createHLAinteger64BE();
 
@@ -301,12 +291,11 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 				Airplane a = new Airplane(AirplaneState.LANDED, flightCodeDecoder.getValue(), airportEncoder.getValue(),
 						destEncoder.getValue(), travelTimeEncoder.getValue());
 				// Decode reflect attribute event time
-				HLAinteger64Time theTimeDecoder = (HLAinteger64Time) theTime;
 				long arrivalTime = ((HLAinteger64Time) theTime).getValue();
-				System.out.println("\t arrivalTime: "+arrivalTime);
+				System.out.println("\t arrivalTime: " + arrivalTime);
 				// Schedule new flight with event time - federate.lookahead + plane travel time
 				this.federate.addFlightToOperationalDay(arrivalTime, a);
-				// a local event corresponding to the remote one is added to the eventlist
+				// a local event corresponding to the remote one is added to the events list
 				this.federate.addEvent(new AirplaneEvent(EventType.LANDING_REQUEST, arrivalTime, a));
 				federate.addManagedAirplane(a);
 
@@ -343,7 +332,8 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 			byte[] userSuppliedTag, OrderType sentOrdering, TransportationTypeHandle theTransport, LogicalTime theTime,
 			OrderType receivedOrdering, MessageRetractionHandle retractionHandle, SupplementalReceiveInfo receiveInfo)
 			throws FederateInternalError {
-		super.receiveInteraction(interactionClass, theParameters, userSuppliedTag, sentOrdering, theTransport, theTime, receivedOrdering, retractionHandle, receiveInfo);
+		super.receiveInteraction(interactionClass, theParameters, userSuppliedTag, sentOrdering, theTransport, theTime,
+				receivedOrdering, retractionHandle, receiveInfo);
 	}
 
 	@Override
