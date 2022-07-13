@@ -163,13 +163,7 @@ accordo con l'**OMT** (Object Model Template), producendo un **FOM** (Federation
 ## Attributes Table
 |Object|Name|Type|Update|Ownership|Sharing|Order|
 |----|----|----|----|---|---|----|
-|operationalDay|date|DateArray|Static|N|N|Timestamp|
 |operationalDay|flightsScheduled|FlightScheduledRecord|Static|N|P/S|Timestamp|
-
-## Interaction Parameters Table
-|Interaction|Name|Type|Order|
-|----|----|----|----|
-|RemoteEvent|airplane|AirplaneRecord|Timestamp|
 
 ## Synchronization Table
 |Label|Capability|
@@ -185,7 +179,6 @@ accordo con l'**OMT** (Object Model Template), producendo un **FOM** (Federation
 ## Data Types Table - Array Data Type
 |Name|DataType|Cardinality|Encoding|
 |----|----|---|----|
-|DateArray|HLAbyte|2|HLAfixedArray|
 |FlightScheduledList|FlightScheduledRecord|Dynamic|HLAvariantArray|
 
 ## Data Types Table - Fixed Record Data Type
