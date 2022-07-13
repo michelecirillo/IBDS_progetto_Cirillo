@@ -208,8 +208,7 @@ RUNWAY_CLEARANCE_REQUEST</panel_attributes>
       <w>170</w>
       <h>80</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;ObjectClass&gt;&gt;
-operationalDay
+    <panel_attributes>operationalDay
 --
 date: Date</panel_attributes>
     <additional_attributes/>

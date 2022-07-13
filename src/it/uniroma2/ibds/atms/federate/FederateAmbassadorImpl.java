@@ -237,10 +237,8 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 	public void discoverObjectInstance(ObjectInstanceHandle theObject, ObjectClassHandle theObjectClass,
 			String objectName) throws FederateInternalError {
 		System.out.println("****FedAmb: Discovered Object " + objectName);
-		this.federate.ocOperationalDayHandle = theObjectClass;
-		this.federate.instanceODHandle = theObject;
 		// TODO Auto-generated method stub
-		// super.discoverObjectInstance(theObject, theObjectClass, objectName);
+		super.discoverObjectInstance(theObject, theObjectClass, objectName);
 	}
 
 	@Override
@@ -256,67 +254,8 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 			byte[] userSuppliedTag, OrderType sentOrdering, TransportationTypeHandle theTransport, LogicalTime theTime,
 			OrderType receivedOrdering, MessageRetractionHandle retractionHandle, SupplementalReflectInfo reflectInfo)
 			throws FederateInternalError {
-		// Check which update is required
-		OperationalDay.UpdateType tag = OperationalDay.UpdateType.valueOf(new String(userSuppliedTag));
-		switch (tag) {
-		case INSERT:
-			// System.out.println("[" + this.federateTime + "] " +
-			// this.federate.federateName + "_FEDAMB Received Attribute Insert.");
-
-			// theAttributes (HashMap) contains elements of HLAvariableArray. The key is the
-			// object class handler
-
-			// HLAvariableArray element used for encoding the flightsList attribute (of type
-			// Ariplane)
-			// HLAvariableArray flightsScheduledListDecoder =
-			// federate.encoderFactory.createHLAvariableArray(factory);
-			HLAfixedRecord flightScheduledDecoder = federate.encoderFactory.createHLAfixedRecord();
-			HLAinteger64BE timeDecoder = federate.encoderFactory.createHLAinteger64BE();
-
-			// Airplane Record Decoder with its HLA fields
-			HLAfixedRecord airplaneRecordDecoder = federate.encoderFactory.createHLAfixedRecord();
-			HLAunicodeString flightCodeDecoder = federate.encoderFactory.createHLAunicodeString();
-			HLAunicodeString airportEncoder = federate.encoderFactory.createHLAunicodeString();
-			HLAunicodeString destEncoder = federate.encoderFactory.createHLAunicodeString();
-			HLAinteger64BE travelTimeEncoder = federate.encoderFactory.createHLAinteger64BE();
-			airplaneRecordDecoder.add(flightCodeDecoder);
-			airplaneRecordDecoder.add(airportEncoder);
-			airplaneRecordDecoder.add(destEncoder);
-			airplaneRecordDecoder.add(travelTimeEncoder);
-
-			flightScheduledDecoder.add(timeDecoder);
-			flightScheduledDecoder.add(airplaneRecordDecoder);
-			try {
-				flightScheduledDecoder.decode(theAttributes.get(federate.flightsScheduledHandle));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			// If destination airport is this federate, update calendar with arrival
-			if (destEncoder.getValue().equals(this.federate.getCode())) {
-				System.out.println("[" + this.federateTime + "] " + this.federate.federateName
-						+ "_FEDAMB Received Attribute Insert.");
-				System.out.println("\t flightCode: " + flightCodeDecoder.getValue());
-				// The local object is updated
-				// Create new airplane with source and destination airport switched
-				Airplane a = new Airplane(AirplaneState.LANDED, flightCodeDecoder.getValue(), airportEncoder.getValue(),
-						destEncoder.getValue(), travelTimeEncoder.getValue());
-				// Decode reflect attribute event time
-				long arrivalTime = ((HLAinteger64Time) theTime).getValue();
-				System.out.println("\t arrivalTime: "+arrivalTime);
-				// Schedule new flight with event time - federate.lookahead + plane travel time
-				this.federate.addFlightToOperationalDay(arrivalTime, a);
-				// a local event corresponding to the remote one is added to the eventlist
-				this.federate.addEvent(new AirplaneEvent(EventType.LANDING_REQUEST, arrivalTime, a));
-				federate.addManagedAirplane(a);
-
-				System.out.println("[" + this.federateTime + "] " + this.federate.federateName
-						+ "_FEDAMB added a new LANDING REQUEST to the events list");
-			}
-			break;
-		default:
-			System.err.println("Update type not yet implemented");
-		}
-
+		super.reflectAttributeValues(theObject, theAttributes, userSuppliedTag, sentOrdering, theTransport, theTime,
+				receivedOrdering, retractionHandle, reflectInfo);
 	}
 
 	@Override
@@ -380,11 +319,13 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 						travelTimeDecoder.getValue());
 				federate.addManagedAirplane(a);
 
-				// a local event corresponding to the remote one is added to the eventlist
+				// a local event corresponding to the remote one is added to the events list
 				federate.addEvent(new AirplaneEvent(EventType.LANDING_REQUEST, eventTime, a));
-
 				System.out.println("[" + this.federateTime + "] " + this.federate.federateName
 						+ "_FEDAMB added a new LANDING REQUEST to the events list");
+				
+				// Add new flight to operational day list
+				federate.scheduleNewFlight(eventTime, a);
 			}
 
 		} catch (DecoderException e) {

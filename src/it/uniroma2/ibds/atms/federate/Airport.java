@@ -113,10 +113,6 @@ public class Airport {
 	protected EncoderFactory encoderFactory;
 
 	// handles types - set once we join a federation
-	protected ObjectClassHandle ocOperationalDayHandle;
-	protected AttributeHandle flightsScheduledHandle;
-	protected ObjectInstanceHandle instanceODHandle;
-	protected AttributeHandleSet attributes;
 
 	protected InteractionClassHandle icRemoteEventHandle;
 	protected ParameterHandle timeHandle;
@@ -135,24 +131,13 @@ public class Airport {
 	}
 
 	/**
-	 * Schedule new flight to operational day list and update HLA Object Class
+	 * Schedule new flight to operational day list
 	 * 
 	 * @param nextEventTime arrival/departure time
 	 * @param a             airplane affected
 	 */
 	public void scheduleNewFlight(long nextEventTime, Airplane a) {
 		this.operationalDay.scheduleNewFlight(nextEventTime, a);
-		this.notifyOperationalDayInsert(nextEventTime, a);
-	}
-
-	/**
-	 * Only add a flight to the operational day list
-	 * 
-	 * @param time arrival/departure time
-	 * @param a    airplane affected
-	 */
-	public void addFlightToOperationalDay(long time, Airplane a) {
-		this.operationalDay.scheduleNewFlight(time, a);
 	}
 
 	public void addEvent(LocalEvent e) {
@@ -396,16 +381,6 @@ public class Airport {
 
 			// ---------------------- 7 Publish & Subscribe -------------------------
 
-			// Object classes and Attributes
-			this.ocOperationalDayHandle = rtiAmb.getObjectClassHandle("HLAobjectRoot.OperationalDay");
-			this.flightsScheduledHandle = rtiAmb.getAttributeHandle(ocOperationalDayHandle, "flightsScheduled");
-			attributes = rtiAmb.getAttributeHandleSetFactory().create();
-			attributes.add(flightsScheduledHandle);
-
-			// Both LIN and FCO publish the operional day scheduled flights
-			rtiAmb.publishObjectClassAttributes(ocOperationalDayHandle, attributes);
-			rtiAmb.subscribeObjectClassAttributes(ocOperationalDayHandle, attributes);
-
 			// Interactions and parameters
 			this.icRemoteEventHandle = rtiAmb.getInteractionClassHandle("HLAinteractionRoot.RemoteEvent");
 			// this.timeHandle = rtiAmb.getParameterHandle(icRemoteEventHandle, "time");
@@ -426,7 +401,6 @@ public class Airport {
 			System.out.println(federateName + " All Federates achieved READY_TO_RUN Sync Point");
 
 			// --------------------- 9 Register Object Instance -----------------------
-			this.instanceODHandle = rtiAmb.registerObjectInstance(ocOperationalDayHandle);
 
 		} catch (FederationExecutionDoesNotExist | SaveInProgress | RestoreInProgress | FederateAlreadyExecutionMember
 				| NotConnected | CallNotAllowedFromWithinCallback | RTIinternalError e) {
@@ -521,7 +495,7 @@ public class Airport {
 				// an interaction is sent to the remote airport federate
 				sendRemoteEvent(re);
 				// Schedule departure from this airport
-//				this.scheduleNewFlight(nextEventTime, plane);
+				this.scheduleNewFlight(nextEventTime, plane);
 			} else {
 				// If runway is bysy, a new TAKE_OFF_REQUEST is generated at current time + 10
 				// min
@@ -584,57 +558,6 @@ public class Airport {
 		}
 	}
 
-	private void notifyOperationalDayInsert(long nextEventTime, Airplane a) {
-		// HLAvariableArray element used for encoding the flightsList attribute (of type
-		// Ariplane)
-		// HLAunicodeString element is used for encoding the atomic elements of the List
-		// are HLAunicodeString (list see FOM)
-		HLAfixedRecord flightsScheduledEncoder = encoderFactory.createHLAfixedRecord();
-		HLAfixedRecord airplaneRecordEncoder = encoderFactory.createHLAfixedRecord();
-		HLAinteger64BE timeScheduledEncoder = encoderFactory.createHLAinteger64BE();
-		timeScheduledEncoder.setValue(nextEventTime);
-
-		HLAunicodeString flightCodeEncoder = encoderFactory.createHLAunicodeString();
-		flightCodeEncoder.setValue(a.getFlightCode());
-		HLAunicodeString airportEncoder = encoderFactory.createHLAunicodeString();
-		airportEncoder.setValue(a.getAirport());
-		HLAunicodeString destAirportEncoder = encoderFactory.createHLAunicodeString();
-		destAirportEncoder.setValue(a.getDestinationAirport());
-		HLAinteger64BE travelTimeEncoder = encoderFactory.createHLAinteger64BE();
-		travelTimeEncoder.setValue(a.getTravelTime());
-
-		airplaneRecordEncoder.add(flightCodeEncoder);
-		airplaneRecordEncoder.add(airportEncoder);
-		airplaneRecordEncoder.add(destAirportEncoder);
-		airplaneRecordEncoder.add(travelTimeEncoder);
-
-		flightsScheduledEncoder.add(timeScheduledEncoder);
-		flightsScheduledEncoder.add(airplaneRecordEncoder);
-
-		try {
-			// hashmap of size = 1 (the object class has only 1 attribute)
-			AttributeHandleValueMap attributeValues = rtiAmb.getAttributeHandleValueMapFactory().create(1);
-			// put an element into the map
-			// - objectclass handle is the key, the content is a byte stream generated from
-			// the attribute (HLAvariableArray element)
-			attributeValues.put(flightsScheduledHandle, flightsScheduledEncoder.toByteArray());
-			HLAinteger64Time time = timeFactory.makeTime(nextEventTime);
-			// Acquire ownership of flights scheduled of the OperationalDay Object Class
-			if (!rtiAmb.isAttributeOwnedByFederate(instanceODHandle, flightsScheduledHandle)) {
-				this.fedAmbassador.pendingAcquisition = true;
-				rtiAmb.attributeOwnershipAcquisition(instanceODHandle, attributes, null);
-				while (fedAmbassador.pendingAcquisition)
-					Thread.sleep(10);
-			}
-			// update attribute
-			rtiAmb.updateAttributeValues(instanceODHandle, attributeValues,
-					OperationalDay.UpdateType.INSERT.name().getBytes(), time);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
 	private void leaveSimulationExecution() {
 
 		// ---------- 10 Simulation Main Loop ---------------
@@ -688,10 +611,6 @@ public class Airport {
 		flightsRemained.tailMap(this._simulationEndTime+1).forEach((time, airplane) -> {
 			System.out.println("<" + time + "," + airplane.getFlightCode()+">");
 		});
-//		while (flightsRemained.hasNext()) {
-//			plane = flightsRemained.next();
-//			System.out.println(plane.getFlightCode());
-//		}
 
 	}
 }

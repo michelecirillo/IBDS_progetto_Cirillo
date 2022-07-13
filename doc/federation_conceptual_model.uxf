@@ -89,8 +89,7 @@ airplane: Airplane</panel_attributes>
       <h>70</h>
     </coordinates>
     <panel_attributes>/LocalEvent/
---
-airplane: Airplane</panel_attributes>
+--</panel_attributes>
     <additional_attributes/>
   </element>
   <element>

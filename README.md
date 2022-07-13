@@ -72,13 +72,11 @@ associato (FCO o LIN)
 - _RemoteEvent_ indica un evento che un aeroporto genera per un altro
 	- *airplane* è l'aereo coinvolto nell'evento, che in questo caso sarà un evento di 
 	*landing request*
-- _LocalEvent_ indica un evento locale all'aeroporto
-	- *airplane* è l'aereo coinvolto nell'evento, che in questo caso sarà un evento di 
-	*take off request* o *landing request*, in caso la pista fosse occupata al momento 
-	dell'arrivo dell'aereo
-- _AirplaneEvent_ è l'evento di atterraggio o decollo che riguarda un aereo, il suo 
+- _LocalEvent_ indica un evento locale all'aeroporto, che può essere uno dei seguenti 
+due sottitpi:
+	- _AirplaneEvent_ è l'evento di atterraggio o decollo che riguarda un aereo, il suo 
   _EventType_ può essere quindi _LANDING_REQUEST_ o _TAKE_OFF_REQUEST_ 
- - _RunwayEvent_ è l'evento che cambia lo status (_clearance_) di una pista (_runway_), 
+ 	- _RunwayEvent_ è l'evento che cambia lo status (_clearance_) di una pista (_runway_), 
    il suo _EventType_ è quindi _RUNWAY_CLEARANCE_REQUEST_ 
 - _AirplaneStatus_ è un'enum che contiene tutti i possibili stati in cui può trovarsi un'aereo 
 della simulazione
@@ -135,7 +133,6 @@ e le *interazioni* tra i federati che compongono la *federazione*.
 |Object Model Element|HLA Mapping|
 |--------------------|-----------|
 |Airport|Federate|
-|operationalDay|ObjectClass|
 |Airplane|Not mapped (local entity)|
 |Airplane that flyies from one airport to the other|InteractionClass|
 
@@ -148,8 +145,6 @@ in questo caso il modello a oggetti **HLA**.
 
 Facciamo riferimento alle differenze del __federation design__ rispetto al __federation conceptual model__
 
-- A _operationalDay_ è stato aggiunto lo stereotipo \<\<ObjectClass>> per denotare che 
-si tratta di un oggetto, nella concezione di oggetto HLA
 - Sono state aggiunte le classi _rtiAmbassador_ e _FederateAmbassadorImpl_ che sono le classi che implementano la 
 logica di comunicazione tra federati in una federazione HLA
 - A _RemoteEvent_ è stato aggiunto lo stereotipo \<\<InteractionClass>> per denotare che si tratta di una 
@@ -162,17 +157,6 @@ modello a oggetti.
 
 Ora che sono state individuate le *entità*, gli *oggetti* e le _interazioni_ HLA, bisogna documentare l'interazione federazione in 
 accordo con l'**OMT** (Object Model Template), producendo un **FOM** (Federation Object Model).
-
-## Object Class Table
-|Name|Superclass|Sharing|
-|----|-----|----|
-|operationalDay|HLAobjectRoot|P/S|
-
-## Attributes Table
-|Object|Name|Type|Update|Ownership|Sharing|Order|
-|----|----|----|----|---|---|----|
-|operationalDay|date|DateArray|Static|N|N|Timestamp|
-|operationalDay|flightsScheduled|FlightScheduledRecord|Static|N|P/S|Timestamp|
 
 ## Interaction Class
 |InteractionClass|Superclass|Sharing|Order|
@@ -195,12 +179,6 @@ accordo con l'**OMT** (Object Model Template), producendo un **FOM** (Federation
 |EventType|HLAunicodeString|LANDING_REQUEST|1
 |||TAKE_OFF_REQUEST|2|
 
-## Data Types Table - Array Data Type
-|Name|DataType|Cardinality|Encoding|
-|----|----|---|----|
-|DateArray|HLAbyte|2|HLAfixedArray|
-|FlightScheduledList|FlightScheduledRecord|Dynamic|HLAvariantArray|
-
 ## Data Types Table - Fixed Record Data Type
 |Record name|Name|Type|Semantics|Encoding|Semantics|
 |----|----|----|----|----|----|
@@ -208,6 +186,4 @@ accordo con l'**OMT** (Object Model Template), producendo un **FOM** (Federation
 ||airport|HLAunicodeString|Codice dell'aeroporto di partenza|||
 ||destinationAirport|HLAunicodeString|Codice dell'aeroporto di destinazione|||
 ||travelTime|HLAinteger64BE|Tempo di volo|||
-|FlightScheduledRecord|time|HLAinteger64Time|Minuto in cui è schedulato il volo|HLAfixedRecord|Tempo e aereo schedulato in un operational day|
-||airplane|AirplaneRecord|Aereo schedulato|||
     
