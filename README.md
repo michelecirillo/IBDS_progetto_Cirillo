@@ -163,7 +163,7 @@ accordo con l'**OMT** (Object Model Template), producendo un **FOM** (Federation
 ## Attributes Table
 |Object|Name|Type|Update|Ownership|Sharing|Order|
 |----|----|----|----|---|---|----|
-|operationalDay|flightsScheduled|FlightScheduledRecord|Static|N|P/S|Timestamp|
+|operationalDay|flightsScheduled|FlightScheduledList|Static|N|P/S|Timestamp|
 
 ## Synchronization Table
 |Label|Capability|
