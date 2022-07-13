@@ -296,13 +296,11 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 			airplaneRecordDecoder.add(travelTimeDecoder);
 
 			HLAunicodeString typeDecoder = federate.encoderFactory.createHLAunicodeString();
-			// HLAinteger64BE timeEncoder = federate.encoderFactory.createHLAinteger64BE();
 
 			airplaneRecordDecoder.decode(theParameters.get(federate.airplaneHandle));
 			String flightCode = flightCodeDecoder.getValue();
 			typeDecoder.decode(theParameters.get(federate.typeHandle));
 			String type = typeDecoder.getValue();
-			// destEncoder.decode(theParameters.get(federate.airplaneHandle));
 			String destCode = destDecoder.getValue();
 			long eventTime = ((HLAinteger64Time) theTime).getValue();
 
@@ -312,7 +310,6 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 				System.out.println("\t interaction timestamp: " + eventTime);
 				System.out.println("\t flightCode: " + flightCode);
 				System.out.println("\t type: " + type);
-				// the interaction must be handled
 
 				// a new airplane is added to the list of managed ones
 				Airplane a = new Airplane(AirplaneState.IN_FLIGHT, flightCode, airportDecoder.getValue(), destCode,
@@ -321,7 +318,7 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 				federate.addManagedAirplane(a);
 
 				// a local event corresponding to the remote one is added to the events list
-				federate.addEvent(new AirplaneEvent(EventType.LANDING_REQUEST, eventTime, a));
+				federate.addEvent(new AirplaneEvent(EventType.valueOf(type), eventTime, a));
 				System.out.println("[" + this.federateTime + "] " + this.federate.federateName
 						+ "_FEDAMB added a new LANDING REQUEST to the events list");
 				
