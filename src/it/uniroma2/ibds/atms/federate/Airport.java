@@ -70,7 +70,7 @@ public class Airport {
 
 	// Airport properties
 	private String code; // airport code
-	private Boolean[] isRunwayClear; // runway clearance state
+	private Boolean[] isRunwayClear; // runways clearance state
 	private Set<Airplane> managedAirplanes; // collection of airplanes under the Control Tower
 											// responsibility
 	private PriorityQueue<LocalEvent> eventsList; // ordered queue of events to be processed (PriorityQueue allows
@@ -214,7 +214,7 @@ public class Airport {
 		LocalEvent event;
 		long nextEventTimestamp; // timestamp of the next event to be processed
 		long currentTime; // current logical time
-		long nextTime; // timestamp of the next evento to be scheduled
+		long nextTime; // timestamp of the next event to be scheduled
 		long timeStep = 10; // time step used for determining the nextTime value
 
 		// Federate Initialization
@@ -446,7 +446,7 @@ public class Airport {
 				addEvent(new AirplaneEvent(EventType.TAKE_OFF_REQUEST, currentTime + 3 * timeStep, plane));
 
 			} else {
-				// If runway is bysy, a new LANDING_REQUEST is generated at current time + time
+				// If runways are busy, a new LANDING_REQUEST is generated at current time + time
 				// step minutes
 				System.out.println("[" + fedAmbassador.federateTime + "] TOWER: Flight" + plane.getFlightCode()
 						+ " NOT clear for landing ");
@@ -466,8 +466,7 @@ public class Airport {
 				this.setRunwayClearance(runwayClear, false);
 				System.out.println(
 						"[" + fedAmbassador.federateTime + "] TOWER: Runway " + runwayClear + " now is busy. ");
-				// TAKE_OFF_REQUEST generates a remote event
-				// that is implemented as an interaction sent to the remote airport
+				// TAKE_OFF_REQUEST generates an update to the operationalDay Object Class.
 
 				// Switch source and destination airport of the plane in return flight
 				if (plane.getDestinationAirport().equals(this.getCode())) {
@@ -494,7 +493,7 @@ public class Airport {
 				// Schedule departure from this airport
 				this.scheduleNewFlight(nextEventTime, plane);
 			} else {
-				// If runway is bysy, a new TAKE_OFF_REQUEST is generated at current time + time
+				// If runways are busy, a new TAKE_OFF_REQUEST is generated at current time + time
 				// step minutes
 				System.out.println("[" + fedAmbassador.federateTime + "] TOWER: Flight" + plane.getFlightCode()
 						+ " NOT clear for departure ");

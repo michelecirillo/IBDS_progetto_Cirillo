@@ -1,7 +1,7 @@
 ---
 title: Air traffic management system
 author: Michele Cirillo
-geometry: margin=3.5cm
+geometry: margin=2.5cm
 ---
 
 Un progetto di **Michele Cirillo** per il corso di Internet Based Distributed Simulation (IBDS) dell'università "Tor Vergata" in Roma.
@@ -10,7 +10,7 @@ Un progetto di **Michele Cirillo** per il corso di Internet Based Distributed Si
 Si vuole studiare il caso di un sistema di gestione del traffico aereo, in particolare 
 si vuole simulare l'arrivo, l'atterragio ed il decollo di aerei da e per diversi aereoporti (almeno 
 2)\
-Si voglio seguire i seguenti requisiti:
+Si vogliono seguire i seguenti requisiti:
 
 - Ogni aeroporto è provvisto di 2 piste per l'atterraggio/decollo
 	- In caso entrambe siano occupate, si adotta una politica FIFO per la coda d'attesa
@@ -46,7 +46,7 @@ Consideriamo la seguente tabella:
 
 |Req|Breve descrizione|Scelta progettuale|
 |-|------|-----|
-|R1|Ogni aeroporto ha 2 piste|Ariport Class, runway array attribute|
+|R1|Ogni aeroporto ha 2 piste|Airport Class, runway array attribute|
 |R2|Un aereo che arriva attende e dopo decolla di nuovo|Una richiesta di atterraggio genera una nuova richiesta di decollo|
 |R3|Gli aerei sono caratterizzati da aeroporto, aeroporto di destinazione e tempo di viaggio|Airplane Class; airport, destination airport and travel time attributes|
 |R4|Calendario giornaliero per gli arrivi e le partenze|operationalDay Class|
@@ -77,8 +77,7 @@ due sottotipi:
    il suo _EventType_ è quindi _RUNWAY_CLEARANCE_REQUEST_ 
 - _AirplaneStatus_ è un'enum che contiene tutti i possibili stati in cui può trovarsi un'aereo 
 della simulazione
-- _EventType_ è un'enum che contiene tutti i possibili tipi di eventi (sia remote che 
-local)
+- _EventType_ è un'enum che contiene tutti i possibili tipi di eventi
   
 \newpage
 
