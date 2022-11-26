@@ -288,7 +288,7 @@ public class FederateAmbassadorImpl extends NullFederateAmbassador {
 				System.out.println("\t flightCode: " + flightCodeDecoder.getValue());
 				// The local object is updated
 				// Create new airplane with source and destination airport switched
-				Airplane a = new Airplane(AirplaneState.LANDED, flightCodeDecoder.getValue(), airportEncoder.getValue(),
+				Airplane a = new Airplane(AirplaneState.IN_FLIGHT, flightCodeDecoder.getValue(), airportEncoder.getValue(),
 						destEncoder.getValue(), travelTimeEncoder.getValue());
 				// Decode reflect attribute event time
 				long arrivalTime = ((HLAinteger64Time) theTime).getValue();

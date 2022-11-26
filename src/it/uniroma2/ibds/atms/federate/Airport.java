@@ -545,7 +545,7 @@ public class Airport {
 			AttributeHandleValueMap attributeValues = rtiAmb.getAttributeHandleValueMapFactory().create(1);
 			// put an element into the map
 			// - objectclass handle is the key, the content is a byte stream generated from
-			// the attribute (HLAvariableArray element)
+			// the attribute (HLAfixedRecord element)
 			attributeValues.put(flightsScheduledHandle, flightsScheduledEncoder.toByteArray());
 			HLAinteger64Time time = timeFactory.makeTime(nextEventTime);
 			// Acquire ownership of flights scheduled of the OperationalDay Object Class
