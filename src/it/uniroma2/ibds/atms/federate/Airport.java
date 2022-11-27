@@ -41,6 +41,7 @@ import hla.rti1516e.exceptions.InvalidLocalSettingsDesignator;
 import hla.rti1516e.exceptions.InvalidResignAction;
 import hla.rti1516e.exceptions.NameNotFound;
 import hla.rti1516e.exceptions.NotConnected;
+import hla.rti1516e.exceptions.ObjectInstanceNotKnown;
 import hla.rti1516e.exceptions.OwnershipAcquisitionPending;
 import hla.rti1516e.exceptions.RTIinternalError;
 import hla.rti1516e.exceptions.RestoreInProgress;
@@ -560,6 +561,8 @@ public class Airport {
 			rtiAmb.updateAttributeValues(instanceODHandle, attributeValues,
 					OperationalDay.UpdateType.INSERT.name().getBytes(), time);
 
+		} catch (ObjectInstanceNotKnown e) {
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
